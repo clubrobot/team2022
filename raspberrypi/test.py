@@ -10,7 +10,7 @@ from listeners.sensor_listener import SensorListener
 
 
 # Connect to the Raspberry Pi and the different modules
-manager = Manager("10.0.0.4")
+manager = Manager("10.0.0.7")
 manager.connect(7)
 
 
@@ -32,7 +32,7 @@ def passe():
 
 
 while(True):
-	wb.
+	wb.set_velocities(10,0)
 #	print(wb.get_position())
 #	ac.set_clamp_position(1,180)
 #	print(sensors.get_sensor3_range())
