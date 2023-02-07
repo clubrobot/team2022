@@ -4,7 +4,7 @@ from daughter_cards.wheeledbase import WheeledBase
 from daughter_cards.actionneur import Actionneur
 from tracking.libs.positionDetector import PositionDetector
 from daughter_cards.sensors import Sensors
-from setups.setup_serialtalks import *
+#from setups.setup_serialtalks import *
 from listeners.sensor_listener import SensorListener
 
 
@@ -18,14 +18,14 @@ manager.connect(7)
 
 wb = WheeledBase(manager)
 
-sensors =Sensors(manager)
+sensors =Sensors(manager, "sensors")
 
 
 # '/dev/tty.SLAB_USBtoUART'
 # sensors.last_time
-# print(sensors.is_ready())
-# print(sensors.check_errors())
-# print(sensors.get_sensor1_range())
+print(sensors.is_ready())
+print(sensors.check_errors())
+print(sensors.get_sensor1_range())
 
 def passe():
 	return 0,0

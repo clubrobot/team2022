@@ -208,7 +208,7 @@ class SerialTalks:
         block = (timeout is None or timeout > 0)
         try:
             output = queue.get(block, timeout)
-
+            print(output)
         except Empty:
             if timeout is not None:
                 raise TimeoutError('timeout exceeded') from None
@@ -348,7 +348,7 @@ class SerialListener(Thread):
 
             # Process the above message
             try:
-                #print(buffer)
+                print(buffer)
                 if (CRCcheck(buffer, crc_val)):
                     if type_packet == SLAVE_BYTE: self.parent.process(Deserializer(buffer))
                     if type_packet == MASTER_BYTE: self.parent.receive(Deserializer(buffer))
