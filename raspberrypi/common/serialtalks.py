@@ -1,27 +1,17 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-"""
-This library is free software from Club robot Insa Rennes sources; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-"""
+
 import sys
 import serial
 from serial.serialutil import SerialException
 import time
 import random
 import warnings
-from math import inf
 from common.CRC16 import *
 from queue import Queue, Empty, LifoQueue
 from threading import Thread, RLock, Event, current_thread
 import re
-from common.serialutils import Deserializer, IntegerType, FloatType, StringType, SerialBuffer
+from common.serialutils import Deserializer, IntegerType, FloatType, StringType
 
 BAUDRATE = 115200
 
@@ -34,12 +24,10 @@ SETUUID_OPCODE = 0x02
 DISCONNECT_OPCODE = 0x03
 GETEEPROM_OPCODE = 0x04
 SETEEPROM_OPCODE = 0x05
-GETBUFFERSIZE_OPCODE = 0x06
 STDOUT_RETCODE = 0xFFFFFFFF
 STDERR_RETCODE = 0xFFFFFFFE
 
-RESEND_OPCODE = 0xFE
-FREE_BUFFER    = 0xFA
+WARNING_OPCODE = 0xFE
 
 BYTEORDER = 'little'
 ENCODING = 'utf-8'
@@ -94,11 +82,9 @@ class SerialTalks:
         self.queues_lock = RLock()
         self.history = list()
         self.history_lock = RLock()
-        self.alias_retcode = dict()
-        self.last_retcode = -1
         # Instructions
         self.instructions = dict()
-        self.instructions[RESEND_OPCODE] = self.resend
+        self.instructions[WARNING_OPCODE] = self.launch_warning_
 
     def __enter__(self):
         self.connect()
@@ -119,13 +105,6 @@ class SerialTalks:
         except SerialException as e:
             raise ConnectionFailedError(str(e)) from None
 
-        self.serial_buffer = SerialBuffer(self.stream.write, inf)
-
-        # Try to bind FREE_BUFFER funct
-        try:
-            self.bind(FREE_BUFFER, self.serial_buffer.reset)
-        except KeyError: # If it's not the first connect executed 
-            pass
         # Create a listening thread that will wait for inputs
         self.listener = SerialListener(self)
         self.listener.start()
@@ -134,10 +113,9 @@ class SerialTalks:
         startingtime = time.monotonic()
         while not self.is_connected:
             try:
-                self.execute(PING_OPCODE, timeout=0.1)
-                self.reset_queues()
-                self.serial_buffer.buffer_size = self.execute(GETBUFFERSIZE_OPCODE, timeout=0.5).read(INT)
+                output = self.execute(PING_OPCODE, timeout=0.1)
                 self.is_connected = True
+                self.reset_queues()
             except TimeoutError:
                 if time.monotonic() - startingtime > timeout:
                     self.disconnect()
@@ -151,12 +129,6 @@ class SerialTalks:
                 self.is_connected = False
 
     def disconnect(self):
-        # remove free buffer instruction to avoid unexpected call when port is closed
-        if FREE_BUFFER in self.instructions:
-            del self.instructions[FREE_BUFFER]
-            # reset virtual buffer
-            self.serial_buffer.reset()
-
         try:
             self.send(DISCONNECT_OPCODE)
         except NotConnectedError:
@@ -183,7 +155,7 @@ class SerialTalks:
     def rawsend(self, rawbytes):
         try:
             if hasattr(self, 'stream') and self.stream.is_open:
-                sentbytes = self.serial_buffer.send(rawbytes)
+                sentbytes = self.stream.write(rawbytes)
                 return sentbytes
         except SerialException:
             pass
@@ -191,24 +163,21 @@ class SerialTalks:
 
     def send(self, opcode, *args):
         retcode = random.randint(0, 0xFFFFFFFF)
-        content = BYTE(opcode) + ULONG(retcode) + bytes().join(args) 
+        content = BYTE(opcode) + ULONG(retcode) + bytes().join(args)
         # crc calculation
         crc = CRCprocessBuffer(content)
         prefix = MASTER_BYTE + BYTE(len(content)) + USHORT(crc)
         self.history_lock.acquire()
-        self.history.append((self.last_retcode, retcode, [opcode, args]))
-        self.last_retcode = retcode
+        self.history.append((crc, prefix+content))
         if len(self.history)>20:
             _  = self.history.pop(0)
         self.history_lock.release()
-        self.rawsend(prefix + content + BYTE(0))
+        self.rawsend(prefix + content)
         return retcode
 
 
     def get_queue(self, retcode):
         self.queues_lock.acquire()
-        if retcode in self.alias_retcode.keys():
-            retcode = self.alias_retcode[retcode]
         try:
             queue = self.queues_dict[retcode]
         except KeyError:
@@ -259,11 +228,11 @@ class SerialTalks:
 
     def receive(self, input):
         opcode = input.read(BYTE)
-        retcode = input.read(ULONG)
+        retcode = input.read(LONG)
         try:
             output = self.instructions[opcode](input)
             if output is None: return
-            content = ULONG(retcode) + output
+            content = LONG(retcode) + output
             prefix = SLAVE_BYTE + BYTE(len(content))
             self.rawsend(prefix + content)
         except KeyError:
@@ -308,44 +277,18 @@ class SerialTalks:
             k += 1
         binary_file.close()
 
-    def resend(self, message):
+    def launch_warning_(self, message):
         warnings.warn("Message send corrupted !", SerialTalksWarning)
-        prev_retcode = message.read(ULONG)
-        to_send, old_retcode = None, None
+        crc_corrupted = message.read(USHORT)
         self.history_lock.acquire()
         for i in range(len(self.history)):
-            if self.history[i][0] == prev_retcode:
-                to_send = self.history[i][2]
-                main_retcode = self.history[i][1]
+            if self.history[i][0] == crc_corrupted:
                 print("Message resend !")
+                self.rawsend(self.history[i][1])
                 break
         self.history_lock.release()
-        if not to_send is None:
-            self.queues_lock.acquire()
-            new_retcode = self.send(to_send[0], *to_send[1])
-            while main_retcode in self.alias_retcode.keys():
-                main_retcode = self.alias_retcode[main_retcode]
-            self.alias_retcode[new_retcode] = main_retcode
-            self.queues_lock.release()
-
-    def re_receive(self, main_retcode):
-        to_send = None
-        self.history_lock.acquire()
-        for i in range(len(self.history)):
-            if self.history[i][1] == main_retcode:
-                to_send = self.history[i][2]
-                break
-        self.history_lock.release()
-        if not to_send is None:
-            self.queues_lock.acquire()
-            new_retcode = self.send(to_send[0], *to_send[1])
-            while main_retcode in self.alias_retcode.keys():
-                main_retcode = self.alias_retcode[main_retcode]
-            self.alias_retcode[new_retcode] = main_retcode
-            self.queues_lock.release()
 
 
-        
     def getout(self, timeout=0):
         return self.getlog(STDOUT_RETCODE, timeout)
 
@@ -409,8 +352,6 @@ class SerialListener(Thread):
                     if type_packet == MASTER_BYTE: self.parent.receive(Deserializer(buffer))
                 else:
                     warnings.warn("Message receive corrupted !", SerialTalksWarning)
-                    retcode = Deserializer(buffer).read(ULONG)
-                    self.parent.re_receive(retcode)
                     state = 'waiting'
 
             except NotConnectedError:
