@@ -14,20 +14,21 @@
 #include <VL6180X.h>
 #include <TaskManager.h>
 
+
 using namespace std;
 
 TaskManager tm;
 
-VL53L0X vl53_1 = VL53L0X(VL53L0X_1_I2C_ADDR, VL53L0X_1_SHUTDOWN_PIN);
-VL53L0X vl53_2 = VL53L0X(VL53L0X_2_I2C_ADDR, VL53L0X_2_SHUTDOWN_PIN);
-VL53L0X vl53_3 = VL53L0X(VL53L0X_3_I2C_ADDR, VL53L0X_3_SHUTDOWN_PIN);
-VL53L0X vl53_4 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_4_SHUTDOWN_PIN);
-VL53L0X vl53_5 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_5_SHUTDOWN_PIN);
-VL53L0X vl53_6 = VL53L0X(VL53L0X_6_I2C_ADDR, VL53L0X_6_SHUTDOWN_PIN);
-VL53L0X vl53_7 = VL53L0X(VL53L0X_7_I2C_ADDR, VL53L0X_7_SHUTDOWN_PIN);
-VL53L0X vl53_8 = VL53L0X(VL53L0X_8_I2C_ADDR, VL53L0X_8_SHUTDOWN_PIN);
+VL53L0X vl53_1 = VL53L0X(VL53L0X_1_I2C_ADDR, VL53L0X_1_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_2 = VL53L0X(VL53L0X_2_I2C_ADDR, VL53L0X_2_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_3 = VL53L0X(VL53L0X_3_I2C_ADDR, VL53L0X_3_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_4 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_4_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_5 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_5_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_6 = VL53L0X(VL53L0X_6_I2C_ADDR, VL53L0X_6_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_7 = VL53L0X(VL53L0X_7_I2C_ADDR, VL53L0X_7_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_8 = VL53L0X(VL53L0X_8_I2C_ADDR, VL53L0X_8_SHUTDOWN_PIN, NULL);
 
-list<VL53L0X *> sensors_vl53 = {&vl53_1, &vl53_2, &vl53_3, &vl53_4, &vl53_5, &vl53_6, &vl53_7, &vl53_8};
+VL53L0X * sensors_vl53[] = {&vl53_1, &vl53_2, &vl53_3, &vl53_4, &vl53_5, &vl53_6, &vl53_7, &vl53_8};
 
 uint8_t vl53_status[VL53L0X_COUNT] = {0};
 
@@ -42,16 +43,17 @@ void talksExecuteWrapper()
 
 void setup()
 {
+   
     static int count = 0;
 
     // I2C Communication
-    Wire.begin();
-
+    Wire.begin(2, 4); //SDA SCL
+    
     // Serial Communication
     Serial.begin(SERIALTALKS_BAUDRATE);
     talks.begin(Serial);
     topics.begin(talks);
-
+    
     // bind functions
     talks.bind(GET_SENSOR1_OPCODE, GET_SENSOR1);
     talks.bind(GET_SENSOR2_OPCODE, GET_SENSOR2);
@@ -66,19 +68,17 @@ void setup()
 
     //bind subscription
     topics.bind(GET_ALL_OPCODE, GET_ALL);
-
     // Shutdown all VL53L0X sensors
-    for (const auto &cur_sensor : sensors_vl53)
+    for (int i=0; i<VL53L0X_COUNT; i++)
     {
-        cur_sensor->shutdown();
+        sensors_vl53[i]->shutdown();
     }
-
     // Set all VL53L0X timeout in ms
     for (const auto &cur_sensor : sensors_vl53)
     {
         cur_sensor->setTimeout(30);
     }
-
+    
     // Starting all VL53L0X sensors
     for (const auto &cur_sensor : sensors_vl53)
     {
@@ -94,6 +94,7 @@ void setup()
     {
         cur_sensor->startContinuous();
     }
+    
 }
 
 // Loop

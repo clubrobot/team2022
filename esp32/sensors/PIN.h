@@ -25,8 +25,8 @@
 
 // I2C pins
 
-#define SENSORS_SDA 21
-#define SENSORS_SCL 22
+#define SENSORS_SDA 2
+#define SENSORS_SCL 4
 
 // Shift register pin
 
