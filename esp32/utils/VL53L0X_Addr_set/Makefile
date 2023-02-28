@@ -3,23 +3,18 @@ BOARD = esp32doit-devkit-v1
 CHIP = esp32
 
 #Arduino file
-SKETCH = sensors.ino
+SKETCH = main.ino
 
 BOARD_UUID = sensors
-COMMON = ../common
+COMMON = ../../common
 BUILD_DIR =../build
 #EXPAND_LIBS=1
 #Setup all libs used !
 LIBS =  $(ESP_LIBS)/EEPROM \
 		$(ESP_LIBS)/Wire \
-		instructions.cpp \
-		topics.cpp \
-		$(COMMON)/SerialTalks \
 		$(COMMON)/CRC16 \
-		$(COMMON)/SerialTopics \
-		$(COMMON)/ShiftRegister \
 		$(COMMON)/VL53L0X \
-		$(COMMON)/serialutils.cpp
+		$(COMMON)/ShiftRegister
 
 LIBS_with_i=$(addprefix  -I, $(LIBS))
 
@@ -31,5 +26,5 @@ CPP_EXTRA += -DLOG_LEVEL=0
 
 # Congratulations! You made a pretty Makefile :)
 # Now let the grown-ups do the hard work :D
-MODULEMK_DIR = ../makefilesEsp
+MODULEMK_DIR = ../../makefilesEsp
 include $(MODULEMK_DIR)/Module.mk

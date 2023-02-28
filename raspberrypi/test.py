@@ -9,23 +9,26 @@ from listeners.sensor_listener import SensorListener
 
 
 
+
 # Connect to the Raspberry Pi and the different modules
 manager = Manager("10.0.0.7")
 manager.connect(7)
+
+actionneur = Actionneur(manager, "AX12_CONFIG")
 
 
 # Connect wheeledbase
 
 wb = WheeledBase(manager)
 
-sensors =Sensors(manager, "sensors")
+#sensors =Sensors(manager, "sensors")
 
 
 # '/dev/tty.SLAB_USBtoUART'
 # sensors.last_time
-print(sensors.is_ready())
-print(sensors.check_errors())
-print(sensors.get_sensor1_range())
+#print(sensors.is_ready())
+#print(sensors.check_errors())
+#print(sensors.get_sensor1_range())
 
 def passe():
 	return 0,0

@@ -44,7 +44,8 @@ void setup()
     talks.bind(READ_SPEED_OPCODE, READ_SPEED);
     talks.bind(READ_TORQUE_OPCODE, READ_TORQUE);
 
-    AX12::SerialBegin(1000000, 5);
+    //Baud, rx, tx, control
+    AX12::SerialBegin(1000000, 16, 17, 5);
 }
 void loop()
 {

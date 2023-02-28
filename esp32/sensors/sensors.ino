@@ -3,32 +3,35 @@
 
 #include "instructions.h"
 #include "topics.h"
+
+#include <SerialTalks.h>
+#include <SerialTopics.h>
+
+#include <Wire.h>
+
 #include "PIN.h"
 #include "constants.h"
 
-#include <Wire.h>
-#include <SerialTalks.h>
-#include <SerialTopics.h>
 #include <ShiftRegister.h>
 #include <VL53L0X.h>
-#include <VL6180X.h>
-#include <TaskManager.h>
+//#include <VL6180X.h>
+//#include <TaskManager.h>
 
 
 using namespace std;
 
-TaskManager tm;
+//TaskManager tm;
 
 VL53L0X vl53_1 = VL53L0X(VL53L0X_1_I2C_ADDR, VL53L0X_1_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_2 = VL53L0X(VL53L0X_2_I2C_ADDR, VL53L0X_2_SHUTDOWN_PIN, NULL);
-VL53L0X vl53_3 = VL53L0X(VL53L0X_3_I2C_ADDR, VL53L0X_3_SHUTDOWN_PIN, NULL);
-VL53L0X vl53_4 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_4_SHUTDOWN_PIN, NULL);
+//VL53L0X vl53_3 = VL53L0X(VL53L0X_3_I2C_ADDR, VL53L0X_3_SHUTDOWN_PIN, NULL);
+//VL53L0X vl53_4 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_4_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_5 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_5_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_6 = VL53L0X(VL53L0X_6_I2C_ADDR, VL53L0X_6_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_7 = VL53L0X(VL53L0X_7_I2C_ADDR, VL53L0X_7_SHUTDOWN_PIN, NULL);
-VL53L0X vl53_8 = VL53L0X(VL53L0X_8_I2C_ADDR, VL53L0X_8_SHUTDOWN_PIN, NULL);
+//VL53L0X vl53_8 = VL53L0X(VL53L0X_8_I2C_ADDR, VL53L0X_8_SHUTDOWN_PIN, NULL);
 
-VL53L0X * sensors_vl53[] = {&vl53_1, &vl53_2, &vl53_3, &vl53_4, &vl53_5, &vl53_6, &vl53_7, &vl53_8};
+VL53L0X * sensors_vl53[] = {&vl53_1, &vl53_2, /*&vl53_3,*/ /*&vl53_4,*/ &vl53_5, &vl53_6, &vl53_7/*, &vl53_8*/};
 
 uint8_t vl53_status[VL53L0X_COUNT] = {0};
 
@@ -45,14 +48,14 @@ void setup()
 {
    
     static int count = 0;
-
-    // I2C Communication
-    Wire.begin(2, 4); //SDA SCL
     
     // Serial Communication
     Serial.begin(SERIALTALKS_BAUDRATE);
     talks.begin(Serial);
     topics.begin(talks);
+
+    // I2C Communication
+    Wire.begin(SENSORS_SDA, SENSORS_SCL); //SDA SCL
     
     // bind functions
     talks.bind(GET_SENSOR1_OPCODE, GET_SENSOR1);
@@ -68,6 +71,8 @@ void setup()
 
     //bind subscription
     topics.bind(GET_ALL_OPCODE, GET_ALL);
+
+
     // Shutdown all VL53L0X sensors
     for (int i=0; i<VL53L0X_COUNT; i++)
     {
@@ -94,7 +99,7 @@ void setup()
     {
         cur_sensor->startContinuous();
     }
-    
+
 }
 
 // Loop
@@ -102,12 +107,15 @@ void loop()
 {
     static uint16_t count = 0;
 
-    talks.execute();
-    topics.execute();
+    //talks.execute();
+    //topics.execute();
 
     for (const auto &cur_sensor : sensors_vl53)
     {
-        vl53_measurement[count++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);
+        Serial.print(cur_sensor->readRangeContinuousMillimeters(NULL));
+        Serial.print("  ");
+        //vl53_measurement[count++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);
     }
+    Serial.println();
     count = 0;
 }

@@ -1,5 +1,5 @@
 # Board properties
-BOARD = esp32
+BOARD = esp32doit-devkit-v1
 CHIP = esp32
 
 #Arduino file
@@ -14,12 +14,18 @@ LIBS =  $(ESP_LIBS)/EEPROM \
 		topics.cpp \
 		$(COMMON)/SerialTalks \
 		$(COMMON)/CRC16 \
-		$(COMMON)/SerialTopics
-# Define
-CPPFLAGS += -DSERIALTALKS_MAX_OPCODE=0x30
+		$(COMMON)/SerialTopics \
+		$(COMMON)/serialutils.cpp
 
+LIBS_with_i=$(addprefix  -I, $(LIBS))
+
+# Define
+CPP_EXTRA += -DSERIALTALKS_MAX_OPCODE=0x30 $(LIBS_with_i)
+
+CPP_EXTRA += -DBOARD_UUID=\"$(BOARD_UUID)\"
+CPP_EXTRA += -DLOG_LEVEL=0
 
 # Congratulations! You made a pretty Makefile :)
 # Now let the grown-ups do the hard work :D
-MODULEMK_DIR = ..
+MODULEMK_DIR = ../makefilesEsp
 include $(MODULEMK_DIR)/Module.mk
