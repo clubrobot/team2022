@@ -32,7 +32,9 @@ class Sensors(SecureArduino):
                GET_SENSOR5_OPCODE: Deserializer(USHORT(MAX_DIST)),
                GET_SENSOR6_OPCODE: Deserializer(USHORT(MAX_DIST)),
                GET_SENSOR7_OPCODE: Deserializer(USHORT(MAX_DIST)),
-               GET_SENSOR8_OPCODE: Deserializer(USHORT(MAX_DIST)), }
+               GET_SENSOR8_OPCODE: Deserializer(USHORT(MAX_DIST)), 
+               CHECK_ERROR_OPCODE: Deserializer(USHORT(MAX_DIST)), 
+              }
 
     def __init__(self, parent, uuid='SensorBoard'):
         SecureArduino.__init__(self, parent, uuid, default_result=self.DEFAULT)

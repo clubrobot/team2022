@@ -4,7 +4,7 @@ from daughter_cards.wheeledbase import WheeledBase
 from daughter_cards.actionneur import Actionneur
 from tracking.libs.positionDetector import PositionDetector
 from daughter_cards.sensors import Sensors
-#from setups.setup_serialtalks import *
+from setups.setup_serialtalks import *
 from listeners.sensor_listener import SensorListener
 
 
@@ -14,28 +14,29 @@ from listeners.sensor_listener import SensorListener
 manager = Manager("10.0.0.7")
 manager.connect(7)
 
-actionneur = Actionneur(manager, "AX12_CONFIG")
+#actionneur = Actionneur(manager, "AX12_CONFIG")
 
 
 # Connect wheeledbase
 
-wb = WheeledBase(manager)
+#wb = WheeledBase(manager)
 
-#sensors =Sensors(manager, "sensors")
+sensors =Sensors(manager, "sensors")
 
 
 # '/dev/tty.SLAB_USBtoUART'
 # sensors.last_time
-#print(sensors.is_ready())
-#print(sensors.check_errors())
-#print(sensors.get_sensor1_range())
+print(sensors.is_ready())
+print(sensors.check_errors())
+
 
 def passe():
 	return 0,0
 
 
 while(True):
-	wb.set_velocities(10,0)
+	#wb.set_velocities(10,0)
+	print(sensors.get_sensor1_range())
 #	print(wb.get_position())
 #	ac.set_clamp_position(1,180)
 #	print(sensors.get_sensor3_range())

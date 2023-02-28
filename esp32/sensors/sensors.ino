@@ -107,15 +107,12 @@ void loop()
 {
     static uint16_t count = 0;
 
-    //talks.execute();
-    //topics.execute();
+    talks.execute();
+    topics.execute();
 
     for (const auto &cur_sensor : sensors_vl53)
     {
-        Serial.print(cur_sensor->readRangeContinuousMillimeters(NULL));
-        Serial.print("  ");
-        //vl53_measurement[count++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);
+        vl53_measurement[count++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);
     }
-    Serial.println();
     count = 0;
 }
