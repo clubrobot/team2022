@@ -374,7 +374,6 @@ class SerialListener(Thread):
             except serial.serialutil.SerialException:
                 self.parent.disconnect()
                 break
-            print(buffer)
             # Finite state machine
             if state == 'waiting' and inc in [SLAVE_BYTE, MASTER_BYTE]:
                 type_packet = inc
