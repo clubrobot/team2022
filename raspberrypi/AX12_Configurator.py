@@ -137,7 +137,7 @@ if __name__ == "__main__":
     arm.setEndlessMode(True)
     while True:
         for i in range(0, 1023): 
-            arm.move(i)
+            arm.moveSpeed(i,20)
             time.sleep(0.01)
     
         
