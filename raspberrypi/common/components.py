@@ -6,7 +6,7 @@ from types import MethodType
 from threading import RLock
 import warnings
 from common.tcptalks import TCPTalks, TCPTalksServer, NotConnectedError
-##from common.serialtalks import RESEND_OPCODE
+#from common.serialtalks import RESEND_OPCODE
 from logs.log_manager import *
 COMPONENTS_SERVER_DEFAULT_PORT = 25566
 
