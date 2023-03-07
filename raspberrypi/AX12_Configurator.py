@@ -134,9 +134,9 @@ if __name__ == "__main__":
     arm = AX12Configurator("/dev/ttyUSB2")
     arm.connect()
     arm.attach(254)
-    while true:
-        for i in range(0, 360): 
+    while True:
+        for i in range(0, 1023): 
             arm.move(i)
-            time.sleep(0.1)
+            time.sleep(0.01)
     
         
