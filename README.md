@@ -25,3 +25,6 @@
    `./setup.sh`
 
 2. After the setup script, you need to restart you computer.
+
+NB:
+to upload: `sudo -E make flash UPLOAD_PORT=/dev/ttyUSB0`
