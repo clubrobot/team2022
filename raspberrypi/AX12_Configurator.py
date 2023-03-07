@@ -131,7 +131,7 @@ class AX12Configurator(SerialTalks):
 
 
 if __name__ == "__main__":
-    arm = AX12Configurator("AX12_CONFIG")
+    arm = AX12Configurator("/dev/ttyUSB2")
     arm.connect()
     arm.attach(254)
     arm.setLEDAlarm(True)

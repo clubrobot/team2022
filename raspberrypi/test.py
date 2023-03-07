@@ -11,7 +11,7 @@ from listeners.sensor_listener import SensorListener
 
 
 # Connect to the Raspberry Pi and the different modules
-manager = Manager("10.0.0.7")
+manager = Manager("10.0.0.11")
 manager.connect(7)
 
 #actionneur = Actionneur(manager, "AX12_CONFIG")
@@ -19,25 +19,27 @@ manager.connect(7)
 
 # Connect wheeledbase
 
-#wb = WheeledBase(manager)
+wb = WheeledBase(manager)
 
-sensors =Sensors(manager, "sensors")
+#sensors =Sensors(manager, "sensors")
 
 
 # '/dev/tty.SLAB_USBtoUART'
 # sensors.last_time
-print(sensors.is_ready())
-print(sensors.check_errors())
+#print(sensors.is_ready())
+#print(sensors.check_errors())
 
 
 def passe():
 	return 0,0
 
-
+print(wb.get_position())
+print(wb.left_codewheel_counts_per_rev.get())
+print(wb.right_codewheel_counts_per_rev.get())
 #while(True):
-	#wb.set_velocities(10,0)
+wb.goto(1,0)
 	#print(sensors.get_sensor1_range())
-#	print(wb.get_position())
+print(wb.get_position())
 #	ac.set_clamp_position(1,180)
 #	print(sensors.get_sensor3_range())
 #	print(sensors.get_all())
