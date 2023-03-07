@@ -134,4 +134,4 @@ if __name__ == "__main__":
     arm = AX12Configurator("/dev/ttyUSB2")
     arm.connect()
     arm.attach(254)
-    arm.setLEDAlarm(True)
+    arm.move(111)
