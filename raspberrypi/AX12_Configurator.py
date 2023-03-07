@@ -66,6 +66,9 @@ class AX12Configurator(SerialTalks):
 
     def move(self, Pos):
         self.send(_MOVE_OPCODE, FLOAT(Pos))
+
+    def turn(self, Pos):
+        self.send(0x2D, FLOAT(Pos))
     
     def moveSpeed(self, Pos, Speed):
         self.send(_MOVE_SPEED_OPCODE, FLOAT(Pos), FLOAT(Speed))
@@ -131,13 +134,11 @@ class AX12Configurator(SerialTalks):
 
 
 if __name__ == "__main__":
-    arm = AX12Configurator("/dev/ttyUSB2")
+    arm = AX12Configurator("/dev/ttyUSB0")
     arm.connect()
     arm.attach(254)
     arm.setEndlessMode(True)
-    while True:
-        for i in range(0, 1023): 
-            arm.moveSpeed(i,20)
-            time.sleep(0.01)
     
+    while True:
+        arm.turn(   1023)
         

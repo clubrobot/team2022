@@ -35,6 +35,10 @@ void MOVE_SPEED(SerialTalks &inst, Deserializer &input, Serializer &output)
 {
     ax.moveSpeed(input.read<float>(), input.read<float>());
 }
+void TURN(SerialTalks &inst, Deserializer &input, Serializer &output)
+{
+    ax.turn((int) input.read<float>());
+}
 void SET_ENDLESS_MODE(SerialTalks &inst, Deserializer &input, Serializer &output)
 {
     ax.setEndlessMode(input.read<bool>());

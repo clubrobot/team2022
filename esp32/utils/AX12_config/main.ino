@@ -22,6 +22,7 @@ void setup()
 
     talks.bind(MOVE_OPCODE, MOVE);
     talks.bind(MOVE_SPEED_OPCODE, MOVE_SPEED);
+    talks.bind(TURN_OPCODE, TURN);
 
     talks.bind(SET_ENDLESS_MODE_OPCODE, SET_ENDLESS_MODE);
 

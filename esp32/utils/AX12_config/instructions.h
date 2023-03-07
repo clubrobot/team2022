@@ -15,6 +15,7 @@
 
 #define MOVE_OPCODE 0X16
 #define MOVE_SPEED_OPCODE 0X17
+#define TURN_OPCODE 0x2D
 
 #define SET_ENDLESS_MODE_OPCODE 0X18
 
@@ -48,6 +49,7 @@ void SET_BD(SerialTalks &inst, Deserializer &input, Serializer &output);
 
 void MOVE(SerialTalks &inst, Deserializer &input, Serializer &output);
 void MOVE_SPEED(SerialTalks &inst, Deserializer &input, Serializer &output);
+void TURN(SerialTalks &inst, Deserializer &input, Serializer &output);
 
 void SET_ENDLESS_MODE(SerialTalks &inst, Deserializer &input, Serializer &output);
 void SET_TEMP_LIMIT(SerialTalks &inst, Deserializer &input, Serializer &output);
