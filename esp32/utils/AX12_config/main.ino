@@ -45,9 +45,19 @@ void setup()
     talks.bind(READ_TORQUE_OPCODE, READ_TORQUE);
 
     //Baud, rx, tx, control
-    AX12::SerialBegin(1000000, 16, 17, 5);
+    ax.SerialBegin(1000000, 5);
+    ax.attach(254);//Broadcast ID
+    ax.setEndlessMode(true);
+    
+    
 }
 void loop()
 {
-    talks.execute();
+ for(int i=0;i<254;i++){
+    Serial.println(i);
+    ax.attach(i);
+    Serial.print("   ");
+    Serial.println(ax.ping());
+    delay(200);
+ }
 }

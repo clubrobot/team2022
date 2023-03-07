@@ -34,9 +34,9 @@ def passe():
 	return 0,0
 
 
-while(True):
+#while(True):
 	#wb.set_velocities(10,0)
-	print(sensors.get_sensor1_range())
+	#print(sensors.get_sensor1_range())
 #	print(wb.get_position())
 #	ac.set_clamp_position(1,180)
 #	print(sensors.get_sensor3_range())
