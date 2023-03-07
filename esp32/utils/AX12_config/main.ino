@@ -44,20 +44,22 @@ void setup()
     talks.bind(READ_SPEED_OPCODE, READ_SPEED);
     talks.bind(READ_TORQUE_OPCODE, READ_TORQUE);
 
-    //Baud, rx, tx, control
-    ax.SerialBegin(1000000, 5);
+    AX12::SerialBegin(1000000, 5);
+    /*//Baud, rx, tx, control
+    
     ax.attach(254);//Broadcast ID
-    ax.setEndlessMode(true);
+    ax.setEndlessMode(true);*/
     
     
 }
 void loop()
 {
- for(int i=0;i<254;i++){
+    talks.execute();
+ /*for(int i=0;i<254;i++){
     Serial.println(i);
     ax.attach(i);
     Serial.print("   ");
     Serial.println(ax.ping());
     delay(200);
- }
+ }*/
 }

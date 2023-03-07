@@ -131,5 +131,7 @@ class AX12Configurator(SerialTalks):
 
 
 if __name__ == "__main__":
-    arm = AX12Configurator()
+    arm = AX12Configurator("AX12_CONFIG")
     arm.connect()
+    arm.attach(254)
+    arm.setLEDAlarm(True)
