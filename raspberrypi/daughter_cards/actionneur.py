@@ -53,8 +53,16 @@ class Actionneur(SecureArduino):
     def __init__(self, parent, uuid='/dev/arduino/Actionneur'):
         SecureArduino.__init__(self, parent, uuid, self.DEFAULT)
 
-class AX12(Actionneur):
-    def __init__(self, id):
+class AX12(SecureArduino):
+    DEFAULT = {PING_AX_OPCODE: Deserializer(BYTE(0)), 
+            READ_TEMPERATURE_OPCODE: Deserializer(BYTE(0)), 
+            READ_VOLTAGE_OPCODE: Deserializer(BYTE(0)), 
+            READ_POSITION_OPCODE: Deserializer(BYTE(0)), 
+            READ_SPEED_OPCODE: Deserializer(BYTE(0)), 
+            READ_TORQUE_OPCODE: Deserializer(BYTE(0)), 
+            }
+    def __init__(self, id, parent, uuid):
+        SecureArduino.__init__(self, parent, uuid, self.DEFAULT)
         self.id = id
     
     def reset(self): self.send(RESET_OPCODE, BYTE(self.id))

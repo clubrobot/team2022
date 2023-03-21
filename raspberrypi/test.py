@@ -16,8 +16,8 @@ manager.connect(7)
 
 actio = Actionneur(manager, "actionneurs")
 
-elevator = AX12(1); #AX12 avec l'ID 1
-print(elevator.ping())
+elevator = AX12(254, manager, "actionneurs"); #AX12 avec l'ID 1
+elevator.turn(200)
 	
 #LEFTCODEWHEEL_RADIUS_VALUE              = 21.90460280828869
 #RIGHTCODEWHEEL_RADIUS_VALUE         = 22.017182927267537
