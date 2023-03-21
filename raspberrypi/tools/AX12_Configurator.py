@@ -140,5 +140,5 @@ if __name__ == "__main__":
     arm.setEndlessMode(True)
     
     while True:
-        arm.turn(   1023)
+        arm.turn(1023)
         

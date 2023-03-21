@@ -1,7 +1,7 @@
 #import imp
 from common.components import Manager
 from daughter_cards.wheeledbase import WheeledBase
-from daughter_cards.actionneur import Actionneur
+from daughter_cards.actionneur import Actionneur, AX12
 from tracking.libs.positionDetector import PositionDetector
 from daughter_cards.sensors import Sensors
 from setups.setup_serialtalks import *
@@ -14,7 +14,9 @@ from listeners.sensor_listener import SensorListener
 manager = Manager("10.0.0.11")
 manager.connect(7)
 
-#actionneur = Actionneur(manager, "AX12_CONFIG")
+actio = Actionneur(manager, "actionneurs")
+
+elevator = AX12(1); #AX12 avec l'ID 1
 
 
 # Connect wheeledbase
@@ -37,7 +39,7 @@ print(wb.get_position())
 print(wb.left_codewheel_counts_per_rev.get())
 print(wb.right_codewheel_counts_per_rev.get())
 #while(True):
-wb.goto(1,0)
+wb.turnonthespot(3.14)
 	#print(sensors.get_sensor1_range())
 print(wb.get_position())
 #	ac.set_clamp_position(1,180)

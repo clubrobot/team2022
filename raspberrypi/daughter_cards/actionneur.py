@@ -2,71 +2,117 @@
 # -*- coding: utf-8 -*-
 
 from common.serialutils import Deserializer
-from daughter_cards.arduino import Arduino, INT, BYTE
+from daughter_cards.arduino import SecureArduino, INT, BYTE, FLOAT
 import time
 
 # Instructions
-MOVE_ELEVATOR_OPCODE = 0x10
-GET_ELEVATOR_POSITION_OPCODE = 0x11
-MOVE_CLAMP_OPCODE = 0x12
-SET_CLAMP_POSITION_OPCODE = 0x13
-MOVE_WINDSOCK_ARM_OPCODE = 0x14
-SET_WINDSOCK_ARM_POSITION_OPCODE = 0x15
-MOVE_FLAG_OPCODE = 0x16
-RAISE_FLAG_OPCODE = 0x17
-LOWER_FLAG_OPCODE = 0x18
-GET_FLAG_POSITION_OPCODE = 0x19
-CALIBRATE_ELEVATOR_OPCODE = 0x20
-CALIBRATE_FLAG_OPCODE = 0x21
+RESET_OPCODE                = 0X12
+PING_AX_OPCODE              = 0X13
+
+SET_ID_OPCODE               = 0X14
+SET_BD_OPCODE               = 0X15
+
+MOVE_OPCODE                 = 0X16
+MOVE_SPEED_OPCODE           = 0X17
+TURN_OPCODE                 = 0x2D
+
+SET_ENDLESS_MODE_OPCODE     = 0X18
+SET_TEMP_LIMIT_OPCODE       = 0X1C
+SET_ANGLE_LIMIT_OPCODE      = 0X1D
+SET_VOLTAGE_LIMIT_OPCODE    = 0X1E
+SET_MAX_TORQUE_OPCODE       = 0X1F
+SET_MAX_TORQUE_RAM_OPCODE   = 0X20
+SET_SRL_OPCODE              = 0X21
+SET_RDT_OPCODE              = 0X22
+SET_LED_ALARM_OPCODE        = 0X23
+SET_SUTDOWN_ALARM_OPCODE    = 0X24
+SET_CMARGIN_OPCODE          = 0X25
+SET_CSLOPE_OPCODE           = 0X26
+SET_PUNCH_OPCODE            = 0X27
+
+READ_TEMPERATURE_OPCODE     = 0X28
+READ_VOLTAGE_OPCODE         = 0X29
+READ_POSITION_OPCODE        = 0X2A
+READ_SPEED_OPCODE           = 0X2B
+READ_TORQUE_OPCODE          = 0X2C
 
 """
 This class acts as an interface between the raspeberry pi and the arduino.
 It contains methods relating to each action of the actuator.
 It allows the raspeberry pi to ask the arduino to perform an action via a specific OPCODE.
 """
-class Actionneur(Arduino):
+class Actionneur(SecureArduino):
 
-    # def __init__(self, uuid='/dev/arduino/Actionneur'):
     def __init__(self, parent, uuid='/dev/arduino/Actionneur'):
-        Arduino.__init__(self, parent, uuid)
+        SecureArduino.__init__(self, parent, uuid, self.default_result)
 
-    def move_elevator(self, id, height):
-        self.send(MOVE_ELEVATOR_OPCODE, BYTE(id), BYTE(height))
+class AX12(Actionneur):
+    def __init__(self, id):
+        self.id = id
 
-    def get_elevator_position(self, id):
-        pos_elevator = self.execute(GET_ELEVATOR_POSITION_OPCODE, BYTE(id))
-        return pos_elevator.read(BYTE)
+    def reset(self): self.send(RESET_OPCODE, BYTE(self.id))
 
-    def move_clamp(self, id, state):
-        self.send(MOVE_CLAMP_OPCODE, BYTE(id), BYTE(state))
+    def ping(self):
+        output = self.execute(PING_AX_OPCODE, BYTE(self.id))
+        return bool(output.read(BYTE))
 
-    def set_clamp_position(self, id, position):
-        self.send(SET_CLAMP_POSITION_OPCODE, BYTE(id), BYTE(position))
+    def setID(self, newID): self.send(SET_ID_OPCODE, BYTE(self.id), BYTE(newID))
 
-    def move_windsock_arm(self, state):
-        self.send(MOVE_WINDSOCK_ARM_OPCODE, BYTE(state))
+    def setBD(self, newBD): self.send(SET_BD_OPCODE, BYTE(self.id), INT(newBD))
 
-    def set_windsock_arm_position(self, position):
-        self.send(SET_WINDSOCK_ARM_POSITION_OPCODE, BYTE(position))
+    def move(self, Pos): self.send(MOVE_OPCODE, BYTE(self.id), FLOAT(Pos))
 
-    def move_flag(self, height):
-        self.send(MOVE_FLAG_OPCODE, BYTE(height))
+    def turn(self, Speed): self.send(TURN_OPCODE, BYTE(self.id), FLOAT(Speed))
 
-    def raise_flag(self):
-        self.send(RAISE_FLAG_OPCODE)
+    def stop_turn(self): self.turn(0)
+    
+    def moveSpeed(self, Pos, Speed): self.send(MOVE_SPEED_OPCODE, BYTE(self.id), FLOAT(Pos), FLOAT(Speed))
 
-    def lower_flag(self):
-        self.send(LOWER_FLAG_OPCODE)
+    def setEndlessMode(self, Status): self.send(SET_ENDLESS_MODE_OPCODE, BYTE(self.id), BYTE(Status))
 
-    def get_flag_position(self):
-        pos_flag = self.execute(GET_FLAG_POSITION_OPCODE)
-        return pos_flag.read(BYTE)
+    def setTempLimit(self, Temp): self.send(SET_TEMP_LIMIT_OPCODE, BYTE(self.id), BYTE(Temp))
 
-    def calibrate_elevator(self, id):
-        self.send(CALIBRATE_ELEVATOR_OPCODE, BYTE(id))
+    def setAngleLimit(self, CWLimit, CCWLimit): self.send(SET_ANGLE_LIMIT_OPCODE, BYTE(self.id), FLOAT(CWLimit), FLOAT(CCWLimit))
 
-    def calibrate_flag(self):
-        self.send(CALIBRATE_FLAG_OPCODE)
+    def setVoltageLimit(self, DVoltage, UVoltage): self.send(SET_VOLTAGE_LIMIT_OPCODE, BYTE(self.id), BYTE(DVoltage), BYTE(UVoltage))
+
+    def setMaxTorque(self, MaxTorque): self.send(SET_MAX_TORQUE_OPCODE, BYTE(self.id), INT(MaxTorque))
+    
+    def setMaxTorqueRAM(self, MaxTorque): self.send(SET_MAX_TORQUE_RAM_OPCODE, BYTE(self.id), INT(MaxTorque))
+    
+    def setSRL(self, srl): self.send(SET_SRL_OPCODE, BYTE(self.id), BYTE(srl))
+    
+    def setRDT(self, rdt): self.send(SET_RDT_OPCODE, BYTE(self.id), BYTE(rdt))
+    
+    def setLEDAlarm(self, LEDAlarm): self.send(SET_LED_ALARM_OPCODE, BYTE(self.id), BYTE(LEDAlarm))
+
+    def setShutdownAlarm(self, SAlarm): self.send(SET_SUTDOWN_ALARM_OPCODE, BYTE(self.id), BYTE(SAlarm))
+    
+    def setCMargin(self, CWCMargin, CCWCMargin): self.send(SET_CMARGIN_OPCODE, BYTE(self.id), BYTE(CWCMargin), BYTE(CCWCMargin))
+    
+    def setCSlope(self, CWCSlope, CCWCSlope): self.send(SET_CSLOPE_OPCODE, BYTE(self.id), BYTE(CWCSlope), BYTE(CCWCSlope))
+
+    def setPunch(self, punch): self.send(SET_PUNCH_OPCODE, BYTE(self.id), INT(punch))
+    
+    def readTemperature(self):
+        output = self.execute(READ_TEMPERATURE_OPCODE, BYTE(self.id))
+        return output.read(INT)
+
+    def readVoltage(self):
+        output = self.execute(READ_VOLTAGE_OPCODE, BYTE(self.id))
+        return output.read(FLOAT)
+
+    def readPosition(self):
+        output = self.execute(READ_POSITION_OPCODE, BYTE(self.id))
+        return output.read(FLOAT)
+    
+    def readSpeed(self):
+        output = self.execute(READ_SPEED_OPCODE, BYTE(self.id))
+        return output.read(FLOAT)
+
+    def readTorque(self):
+        output = self.execute(READ_TORQUE_OPCODE, BYTE(self.id))
+        return output.read(INT)
 
 
 if __name__ == "__main__":
@@ -74,3 +120,5 @@ if __name__ == "__main__":
 
     s = Actionneur(manager)
     s.connect()
+
+    ax = AX12(1)

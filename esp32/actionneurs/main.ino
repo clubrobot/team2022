@@ -11,8 +11,6 @@ void setup()
     Serial.begin(SERIALTALKS_BAUDRATE);
     talks.begin(Serial);
 
-    talks.bind(ATTACH_OPCODE, ATTACH);
-    talks.bind(DETACH_OPCODE, DETACH);
     talks.bind(RESET_OPCODE, RESET);
 
     talks.bind(PING_AX_OPCODE, PING_AX);
@@ -22,6 +20,7 @@ void setup()
 
     talks.bind(MOVE_OPCODE, MOVE);
     talks.bind(MOVE_SPEED_OPCODE, MOVE_SPEED);
+    talks.bind(TURN_OPCODE, TURN);
 
     talks.bind(SET_ENDLESS_MODE_OPCODE, SET_ENDLESS_MODE);
 
@@ -45,19 +44,11 @@ void setup()
     talks.bind(READ_TORQUE_OPCODE, READ_TORQUE);
 
     //Baud, rx, tx, control
-    ax.SerialBegin(1000000, 5);
-    ax.attach(254);//Broadcast ID
-    ax.setEndlessMode(true);
+    AX12::SerialBegin(1000000, 5);
     
     
 }
-void loop()
-{
- for(int i=0;i<254;i++){
-    Serial.println(i);
-    ax.attach(i);
-    Serial.print("   ");
-    Serial.println(ax.ping());
-    delay(200);
- }
+void loop(){ 
+    talks.execute();
+    
 }

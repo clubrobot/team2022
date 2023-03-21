@@ -16,7 +16,7 @@ DEV_MODE = True
 MATCH_MODE = False
 
 arduino_list = ['sensors', 'wheeledbase', 'power', 'display',
-                'modulescollector', 'mineralscollector', 'watershooter', 'watersorter']
+                'actionneurs']
 
 
 def start(args):

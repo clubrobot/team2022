@@ -4,8 +4,6 @@
 #include <SerialTalks.h>
 #include <AX12.h>
 
-#define ATTACH_OPCODE 0X10
-#define DETACH_OPCODE 0X11
 #define RESET_OPCODE 0X12
 
 #define PING_AX_OPCODE 0X13
@@ -15,6 +13,7 @@
 
 #define MOVE_OPCODE 0X16
 #define MOVE_SPEED_OPCODE 0X17
+#define TURN_OPCODE 0x2D
 
 #define SET_ENDLESS_MODE_OPCODE 0X18
 
@@ -37,8 +36,6 @@
 #define READ_SPEED_OPCODE 0X2B
 #define READ_TORQUE_OPCODE 0X2C
 
-void ATTACH(SerialTalks &inst, Deserializer &input, Serializer &output);
-void DETACH(SerialTalks &inst, Deserializer &input, Serializer &output);
 void RESET(SerialTalks &inst, Deserializer &input, Serializer &output);
 
 void PING_AX(SerialTalks &inst, Deserializer &input, Serializer &output);
@@ -48,6 +45,7 @@ void SET_BD(SerialTalks &inst, Deserializer &input, Serializer &output);
 
 void MOVE(SerialTalks &inst, Deserializer &input, Serializer &output);
 void MOVE_SPEED(SerialTalks &inst, Deserializer &input, Serializer &output);
+void TURN(SerialTalks &inst, Deserializer &input, Serializer &output);
 
 void SET_ENDLESS_MODE(SerialTalks &inst, Deserializer &input, Serializer &output);
 void SET_TEMP_LIMIT(SerialTalks &inst, Deserializer &input, Serializer &output);
