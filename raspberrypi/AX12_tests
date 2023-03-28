@@ -1,0 +1,11 @@
+from common.components import Manager
+from daughter_cards.actionneur import Actionneur, AX12
+from setups.setup_logger import *
+import time
+
+#c'est votre terrain de jeu
+
+manager = Manager("10.0.0.11")#IP du RaspberryPi
+manager.connect(7)
+
+pince = AX12(1, manager)
