@@ -67,56 +67,6 @@ void SET_MAX_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output){
     ax.setMaxTorque(input.read<int>());
 }
 
-void SET_MAX_TORQUE_RAM(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setMaxTorqueRAM(input.read<int>());
-}
-
-void SET_SRL(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setSRL(input.read<byte>());
-}
-
-void SET_RDT(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setRDT(input.read<byte>());
-}
-
-void SET_LED_ALARM(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setLEDAlarm(input.read<byte>());
-}
-
-void SET_SUTDOWN_ALARM(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setShutdownAlarm(input.read<byte>());
-}
-
-void SET_CMARGIN(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setCMargin(input.read<byte>(), input.read<byte>());
-}
-
-void SET_CSLOPE(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setCSlope(input.read<byte>(), input.read<byte>());
-}
-
-void SET_PUNCH(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    ax.setPunch(input.read<int>());
-}
-
-void READ_TEMPERATURE(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    output.write<int>(ax.readTemperature());
-}
-
-void READ_VOLTAGE(SerialTalks &inst, Deserializer &input, Serializer &output){
-    ax.attach(input.read<byte>());
-    output.write<float>(ax.readVoltage());
-}
-
 void READ_POSITION(SerialTalks &inst, Deserializer &input, Serializer &output){
     ax.attach(input.read<byte>());
     output.write<float>(ax.readPosition());

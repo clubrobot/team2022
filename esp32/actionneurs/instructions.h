@@ -13,28 +13,18 @@
 
 #define MOVE_OPCODE 0X16
 #define MOVE_SPEED_OPCODE 0X17
-#define TURN_OPCODE 0x2D
+#define TURN_OPCODE 0x18
 
-#define SET_ENDLESS_MODE_OPCODE 0X18
+#define SET_ENDLESS_MODE_OPCODE 0X19
 
-#define SET_TEMP_LIMIT_OPCODE 0X1C
-#define SET_ANGLE_LIMIT_OPCODE 0X1D
-#define SET_VOLTAGE_LIMIT_OPCODE 0X1E
-#define SET_MAX_TORQUE_OPCODE 0X1F
-#define SET_MAX_TORQUE_RAM_OPCODE 0X20
-#define SET_SRL_OPCODE 0X21
-#define SET_RDT_OPCODE 0X22
-#define SET_LED_ALARM_OPCODE 0X23
-#define SET_SUTDOWN_ALARM_OPCODE 0X24
-#define SET_CMARGIN_OPCODE 0X25
-#define SET_CSLOPE_OPCODE 0X26
-#define SET_PUNCH_OPCODE 0X27
+#define SET_TEMP_LIMIT_OPCODE 0X1A
+#define SET_ANGLE_LIMIT_OPCODE 0X1B
+#define SET_VOLTAGE_LIMIT_OPCODE 0X1C
+#define SET_MAX_TORQUE_OPCODE 0X1D
 
-#define READ_TEMPERATURE_OPCODE 0X28
-#define READ_VOLTAGE_OPCODE 0X29
-#define READ_POSITION_OPCODE 0X2A
-#define READ_SPEED_OPCODE 0X2B
-#define READ_TORQUE_OPCODE 0X2C
+#define READ_POSITION_OPCODE 0X1E
+#define READ_SPEED_OPCODE 0X1F
+#define READ_TORQUE_OPCODE 0X2A
 
 void RESET(SerialTalks &inst, Deserializer &input, Serializer &output);
 
@@ -52,17 +42,7 @@ void SET_TEMP_LIMIT(SerialTalks &inst, Deserializer &input, Serializer &output);
 void SET_ANGLE_LIMIT(SerialTalks &inst, Deserializer &input, Serializer &output);
 void SET_VOLTAGE_LIMIT(SerialTalks &inst, Deserializer &input, Serializer &output);
 void SET_MAX_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_MAX_TORQUE_RAM(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_SRL(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_RDT(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_LED_ALARM(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_SUTDOWN_ALARM(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_CMARGIN(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_CSLOPE(SerialTalks &inst, Deserializer &input, Serializer &output);
-void SET_PUNCH(SerialTalks &inst, Deserializer &input, Serializer &output);
 
-void READ_TEMPERATURE(SerialTalks &inst, Deserializer &input, Serializer &output);
-void READ_VOLTAGE(SerialTalks &inst, Deserializer &input, Serializer &output);
 void READ_POSITION(SerialTalks &inst, Deserializer &input, Serializer &output);
 void READ_SPEED(SerialTalks &inst, Deserializer &input, Serializer &output);
 void READ_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output);
