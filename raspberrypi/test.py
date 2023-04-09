@@ -11,7 +11,7 @@ import time
 
 
 #Connect to the Raspberry Pi and the different modules
-manager = Manager("10.0.0.5")
+manager = Manager("172.31.27.119")
 manager.connect(7)
 
 sensors = Sensors(manager, "sensors")
@@ -19,7 +19,7 @@ sensors = Sensors(manager, "sensors")
 print(sensors.is_ready())
 print(sensors.check_errors())
 
-print(sensors.get_all())
+print(sensors.get_sensor1_range())
 
 
 #LEFTCODEWHEEL_RADIUS_VALUE              = 21.90460280828869

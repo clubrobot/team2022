@@ -96,7 +96,8 @@ class Sensors(SecureArduino):
         return self.sensor8, UNUSED_SENSOR
 
     def get_sensor1_range(self):
-        return self.execute(GET_SENSOR1_OPCODE).read(USHORT) , UNUSED_SENSOR
+        output = self.execute(GET_SENSOR1_OPCODE)
+        return output.read(USHORT)
 
     def get_sensor2_range(self):
         return self.execute(GET_SENSOR2_OPCODE).read(USHORT) , UNUSED_SENSOR
