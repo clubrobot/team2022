@@ -59,7 +59,6 @@ class Sensors(SecureArduino):
 
     @TopicHandler(USHORT, USHORT, USHORT, USHORT, USHORT, USHORT, USHORT, USHORT)
     def get_all_sensors_handler(self, sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8):
-        print("a")
         self.sensor1 = sensor1
         self.sensor2 = sensor2
         self.sensor3 = sensor3
