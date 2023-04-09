@@ -11,26 +11,17 @@ import time
 
 
 #Connect to the Raspberry Pi and the different modules
-manager = Manager("10.0.0.11")
+manager = Manager("10.0.0.5")
 manager.connect(7)
 
-actio = Actionneur(manager)
+sensors = Sensors(manager, "sensors")
 
-#for i in range(0,20):
-#	elevator = AX12(i, manager, "actionneurs"); #AX12 avec l'ID 1
-#	print(i)
-#	print(elevator.ping())
+print(sensors.is_ready())
+print(sensors.check_errors())
 
-pince = AX12(3, manager) #AX12 avec l'ID 1
-pince.setMaxTorque(1023)
-#pince.turn(-200)
+print(sensors.get_all())
 
-#time.sleep(10)
 
-elevator = AX12(1, manager, "actionneurs")
-elevator.setEndlessMode(True)
-elevator.setMaxTorque(1023)
-elevator.turn(500)
 #LEFTCODEWHEEL_RADIUS_VALUE              = 21.90460280828869
 #RIGHTCODEWHEEL_RADIUS_VALUE         = 22.017182927267537
 #ODOMETRY_AXLETRACK_VALUE            = 357.5722465739272

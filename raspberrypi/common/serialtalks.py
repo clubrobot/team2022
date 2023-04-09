@@ -403,6 +403,7 @@ class SerialListener(Thread):
 
             # Process the above message
             try:
+                print(buffer)
                 if (CRCcheck(buffer, crc_val)):
                     if type_packet == SLAVE_BYTE: self.parent.process(Deserializer(buffer))
                     if type_packet == MASTER_BYTE: self.parent.receive(Deserializer(buffer))

@@ -1,4 +1,4 @@
-#include <Arduino.h>
+//#include <Arduino.h>
 #include <list>
 
 #include "instructions.h"
@@ -24,14 +24,14 @@ using namespace std;
 
 VL53L0X vl53_1 = VL53L0X(VL53L0X_1_I2C_ADDR, VL53L0X_1_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_2 = VL53L0X(VL53L0X_2_I2C_ADDR, VL53L0X_2_SHUTDOWN_PIN, NULL);
-//VL53L0X vl53_3 = VL53L0X(VL53L0X_3_I2C_ADDR, VL53L0X_3_SHUTDOWN_PIN, NULL);
-//VL53L0X vl53_4 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_4_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_3 = VL53L0X(VL53L0X_3_I2C_ADDR, VL53L0X_3_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_4 = VL53L0X(VL53L0X_4_I2C_ADDR, VL53L0X_4_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_5 = VL53L0X(VL53L0X_5_I2C_ADDR, VL53L0X_5_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_6 = VL53L0X(VL53L0X_6_I2C_ADDR, VL53L0X_6_SHUTDOWN_PIN, NULL);
 VL53L0X vl53_7 = VL53L0X(VL53L0X_7_I2C_ADDR, VL53L0X_7_SHUTDOWN_PIN, NULL);
-//VL53L0X vl53_8 = VL53L0X(VL53L0X_8_I2C_ADDR, VL53L0X_8_SHUTDOWN_PIN, NULL);
+VL53L0X vl53_8 = VL53L0X(VL53L0X_8_I2C_ADDR, VL53L0X_8_SHUTDOWN_PIN, NULL);
 
-VL53L0X * sensors_vl53[] = {&vl53_1, &vl53_2, /*&vl53_3,*/ /*&vl53_4,*/ &vl53_5, &vl53_6, &vl53_7/*, &vl53_8*/};
+VL53L0X * sensors_vl53[] = {&vl53_1, &vl53_2, &vl53_3, &vl53_4, &vl53_5, &vl53_6, &vl53_7, &vl53_8};
 
 uint8_t vl53_status[VL53L0X_COUNT] = {0};
 
@@ -110,8 +110,7 @@ void loop()
     talks.execute();
     topics.execute();
 
-    for (const auto &cur_sensor : sensors_vl53)
-    {
+    for (const auto &cur_sensor : sensors_vl53){
         vl53_measurement[count++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);
     }
     count = 0;

@@ -5,7 +5,7 @@
 #include <ShiftRegister.h>
 #include <VL53L0X.h>
 
-VL53L0X vl53_1 = VL53L0X(0x37, 18, NULL);
+VL53L0X vl53_1 = VL53L0X(0X34, 27, NULL);
 
 void scan(){
     byte error, address;
@@ -14,8 +14,7 @@ void scan(){
     Serial.println("Scanning...");
 
     nDevices = 0;
-    for (address = 1; address < 127; address++)
-    {
+    for (address = 1; address < 127; address++){
         // The i2c_scanner uses the return value of
         // the Write.endTransmisstion to see if
         // a device did acknowledge to the address.
@@ -26,7 +25,7 @@ void scan(){
         {
             Serial.print("I2C device found at address 0x");
             if (address < 16)
-                Serial.print("0");
+            Serial.print("0");
             Serial.print(address, HEX);
             Serial.println("  !");
 
@@ -54,8 +53,8 @@ void setup(){
     scan();
     delay(100);
     vl53_1.begin();
+    delay(100);
     scan();
-    delay(1000);
 }
 
 void loop(){
