@@ -388,7 +388,7 @@ class SecureSerialTalksProxy(Proxy):
                 except:
                     pass
             try:
-                result = execute_addr(opcode, *args, **kwargs)
+                result = execute_addr(opcode, *args, **kwargs)     
             except (NotConnectedError, ConnectionFailedError, KeyError):
                 self.connect(with_lock=False)
                 if opcode in self.default_result.keys():
