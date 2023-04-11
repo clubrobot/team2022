@@ -72,53 +72,52 @@ class Sensors(SecureArduino):
         return [self.sensor1, self.sensor2, self.sensor3, self.sensor4, self.sensor5, self.sensor6, self.sensor7, self.sensor8]
 
     def get_range_left_front(self):
-        return self.sensor1, UNUSED_SENSOR
+        return self.sensor1
 
     def get_range_mid_left_front(self):
-        return self.sensor2, UNUSED_SENSOR
+        return self.sensor2
 
     def get_range_mid_right_front(self):
-        return self.sensor3, UNUSED_SENSOR
+        return self.sensor3
 
     def get_range_right_front(self):
-        return self.sensor4, UNUSED_SENSOR
+        return self.sensor4
 
     def get_range_left_back(self):
-        return self.sensor5, UNUSED_SENSOR
+        return self.sensor5
 
     def get_range_mid_left_back(self):
-        return self.sensor6, UNUSED_SENSOR
+        return self.sensor6
 
     def get_range_mid_right_back(self):
-        return self.sensor7, UNUSED_SENSOR
+        return self.sensor7
 
     def get_range_right_back(self):
-        return self.sensor8, UNUSED_SENSOR
+        return self.sensor8
 
     def get_sensor1_range(self):
-        output = self.execute(GET_SENSOR1_OPCODE)
-        return output.read(USHORT)
+        return self.execute(GET_SENSOR1_OPCODE).read(USHORT)
 
     def get_sensor2_range(self):
-        return self.execute(GET_SENSOR2_OPCODE).read(USHORT) , UNUSED_SENSOR
+        return self.execute(GET_SENSOR2_OPCODE).read(USHORT)
 
     def get_sensor3_range(self):
-        return self.execute(GET_SENSOR3_OPCODE).read(USHORT) , UNUSED_SENSOR
+        return self.execute(GET_SENSOR3_OPCODE).read(USHORT)
 
     def get_sensor4_range(self):
-        return self.execute(GET_SENSOR4_OPCODE).read(USHORT) , UNUSED_SENSOR
+        return self.execute(GET_SENSOR4_OPCODE).read(USHORT)
 
     def get_sensor5_range(self):
-        return self.execute(GET_SENSOR5_OPCODE).read(USHORT) , UNUSED_SENSOR
+        return self.execute(GET_SENSOR5_OPCODE).read(USHORT)
 
     def get_sensor6_range(self):
-        return self.execute(GET_SENSOR6_OPCODE).read(USHORT) , UNUSED_SENSOR
+        return self.execute(GET_SENSOR6_OPCODE).read(USHORT)
 
     def get_sensor7_range(self):
-        return self.execute(GET_SENSOR7_OPCODE).read(USHORT) , UNUSED_SENSOR
+        return self.execute(GET_SENSOR7_OPCODE).read(USHORT)
 
     def get_sensor8_range(self):
-        return self.execute(GET_SENSOR8_OPCODE).read(USHORT) , UNUSED_SENSOR
+        return self.execute(GET_SENSOR8_OPCODE).read(USHORT)
 
     def is_ready(self):
         try:
@@ -127,9 +126,7 @@ class Sensors(SecureArduino):
             return False
 
     def check_errors(self):
-        deser = self.execute(CHECK_ERROR_OPCODE)
-        error = deser.read(BYTE)
-        return error
+        return self.execute(CHECK_ERROR_OPCODE).read(BYTE)
 
 
 if __name__ == "__main__":

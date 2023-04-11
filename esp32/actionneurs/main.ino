@@ -35,18 +35,7 @@ void setup()
 
     //Baud, rx, tx, control
     AX12::SerialBegin(1000000, 5);
-   
-    ax.attach(254);
-    ax.setEndlessMode(true);
 }
 void loop(){ 
-    //talks.execute();
-     
-    for(int i=0;i<254;i++){
-    Serial.println(i);
-    ax.attach(i);
-    Serial.print("   ");
-    Serial.println(ax.ping());
-    delay(200);
- }
+    talks.execute();
 }

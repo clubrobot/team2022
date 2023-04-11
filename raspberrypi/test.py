@@ -1,25 +1,27 @@
-#import imp
 from common.components import Manager
 from daughter_cards.wheeledbase import WheeledBase
 from daughter_cards.actionneur import Actionneur, AX12
 from tracking.libs.positionDetector import PositionDetector
 from daughter_cards.sensors import Sensors
-from setups.setup_serialtalks import *
-from listeners.sensor_listener import SensorListener
+
 import time
 
-
-
 #Connect to the Raspberry Pi and the different modules
-manager = Manager("172.31.27.119")
+manager = Manager("10.0.0.5")
 manager.connect(7)
+
+from setups.setup_serialtalks import *
+
+actio = Actionneur(manager)
+arm = AX12(3, manager)
+
+arm.moveSpeed(500, 200)
+
 
 sensors = Sensors(manager, "sensors")
 
-print(sensors.is_ready())
-print(sensors.check_errors())
-
-print(sensors.get_sensor1_range())
+while 1:
+    print(sensors.test())
 
 
 #LEFTCODEWHEEL_RADIUS_VALUE              = 21.90460280828869
