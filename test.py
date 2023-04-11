@@ -10,29 +10,28 @@ from listeners.sensor_listener import SensorListener
 
 
 # Connect to the Raspberry Pi and the different modules
-manager = Manager("10.0.0.4")
+manager = Manager("10.0.0.5")
 manager.connect(7)
 
+actio = Actionneur(manager)
 
-# Connect wheeledbase
+#for i in range(0,20):
+#	elevator = AX12(i, manager, "actionneurs"); #AX12 avec l'ID 1
+#	print(i)
+#	print(elevator.ping())
 
-wb = WheeledBase(manager)
-
-sensors =Sensors(manager)
-
-
-# '/dev/tty.SLAB_USBtoUART'
-# sensors.last_time
-# print(sensors.is_ready())
-# print(sensors.check_errors())
-# print(sensors.get_sensor1_range())
-
-def passe():
-	return 0,0
+pince = AX12(3, manager) #AX12 avec l'ID 1
+pince.setMaxTorque(1023)
 
 
-while(True):
-	wb.
+elevator = AX12(1, manager)
+elevator.setEndlessMode(True)
+elevator.setMaxTorque(1023)
+elevator.turn(500)
+
+
+#while(True):
+	
 #	print(wb.get_position())
 #	ac.set_clamp_position(1,180)
 #	print(sensors.get_sensor3_range())
