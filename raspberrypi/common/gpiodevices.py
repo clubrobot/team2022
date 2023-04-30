@@ -1,6 +1,23 @@
 from RPi.GPIO import GPIO
 from gpiozero import Button
 
+class gpio_pins():
+    INTER_1_PIN = 12
+    INTER_2_PIN = 32
+    INTER_3_PIN = 31
+    INTER_4_PIN = 29
+    LED1_PIN = 16
+    LED2_PIN = 4
+    LED3_PIN = 40
+    LED4_PIN = 36
+
+    ALED2_PIN = 22
+    ALED3_PIN = 18
+    ALED1_PIN = 11
+
+    TIRETTE_PIN = 37
+    URGENCE_PIN = 38
+    DEV_MODE_PIN = 18
 
 class Device:
     list_pin = [False] * 59

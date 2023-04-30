@@ -7,8 +7,9 @@ SKETCH = sensors.ino
 
 BOARD_UUID = sensors
 COMMON = ../common
-BUILD_DIR =../build
+#BUILD_DIR =../build
 #EXPAND_LIBS=1
+
 #Setup all libs used !
 LIBS =  $(ESP_LIBS)/EEPROM \
 		$(ESP_LIBS)/Wire \

@@ -1,4 +1,4 @@
-//#include <Arduino.h>
+#include <Arduino.h>
 #include <list>
 
 #include "instructions.h"
@@ -12,7 +12,7 @@
 #include "PIN.h"
 #include "constants.h"
 
-#include <ShiftRegister.h>
+//#include <ShiftRegister.h>
 #include <VL53L0X.h>
 //#include <VL6180X.h>
 //#include <TaskManager.h>
@@ -46,7 +46,7 @@ void talksExecuteWrapper()
 
 void setup()
 {
-   
+
     static int count = 0;
     
     // Serial Communication
@@ -99,19 +99,18 @@ void setup()
     {
         cur_sensor->startContinuous();
     }
-
 }
 
 // Loop
+uint16_t counter;
 void loop()
 {
-    static uint16_t count = 0;
+    counter = 0;
 
     talks.execute();
     topics.execute();
 
     for (const auto &cur_sensor : sensors_vl53){
-        vl53_measurement[count++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);
+        vl53_measurement[counter++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);
     }
-    count = 0;
 }
