@@ -44,7 +44,7 @@ try:
             self.parent = parent
             self.uuid = uuid
             
-            SerialTalks.__init__(self, os.path.join('/dev/aarduino', uuid))
+            SerialTalks.__init__(self, os.path.join('/dev/arduino', uuid))
 
         def _setup(self):
             try:
