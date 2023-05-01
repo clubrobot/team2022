@@ -8,10 +8,11 @@ class Pince:
         self.pince.setMaxTorque(1023)
 
     def fermer(self):
-        self.pince.move(50)
+        self.pince.move(800)
 
     def ouvrir(self):
         #TODO
+        return "TODO"
 
     def isFerme(self):
         return "TODO"

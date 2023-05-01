@@ -110,31 +110,34 @@ if not ccw:
 
 lticks0, rticks0 = wheeledbase.get_codewheels_counter()
 wheeledbase.reset()
+length=600
+
 for k in range(abs(M)):
     if ccw:
-        wheeledbase.goto(500,   0)
+        wheeledbase.goto(length,   0)
         wheeledbase.turnonthespot(math.pi/2)
+        
         wheeledbase.wait()
     else:
-        wheeledbase.goto(500,   0)
+        wheeledbase.goto(length,   0)
         wheeledbase.turnonthespot(-math.pi/2)
         wheeledbase.wait()
     print('{:.0f}/{} ({:.0f}%)'.format(k, M, 100 * (k + 0.25) / M), end='\r')
     if ccw:
-        wheeledbase.goto(500, 500)
+        wheeledbase.goto(length, length)
         wheeledbase.turnonthespot(math.pi)
         wheeledbase.wait()
     else:
-        wheeledbase.goto(500, -500)
+        wheeledbase.goto(length, -length)
         wheeledbase.turnonthespot(math.pi)
         wheeledbase.wait()
     print('{:.0f}/{} ({:.0f}%)'.format(k, M, 100 * (k + 0.50) / M), end='\r')
     if ccw:
-        wheeledbase.goto(0, 500)
+        wheeledbase.goto(0, length)
         wheeledbase.turnonthespot(-math.pi/2)
         wheeledbase.wait()
     else:
-        wheeledbase.goto(0, -500)
+        wheeledbase.goto(0, -length)
         wheeledbase.turnonthespot(math.pi/2)
         wheeledbase.wait()
     print('{:.0f}/{} ({:.0f}%)'.format(k, M, 100 * (k + 0.75) / M), end='\r')
