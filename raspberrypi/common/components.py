@@ -8,6 +8,8 @@ import warnings
 from common.tcptalks import TCPTalks, TCPTalksServer, NotConnectedError
 #from common.serialtalks import RESEND_OPCODE
 from logs.log_manager import *
+
+import traceback
 COMPONENTS_SERVER_DEFAULT_PORT = 25566
 
 CREATE_SERIALTALKS_COMPONENT_OPCODE = 0x10
@@ -41,7 +43,8 @@ try:
         def __init__(self, parent, uuid):
             self.parent = parent
             self.uuid = uuid
-            SerialTalks.__init__(self, os.path.join('/dev/arduino', uuid))
+            
+            SerialTalks.__init__(self, os.path.join('/dev/aarduino', uuid))
 
         def _setup(self):
             try:
@@ -341,6 +344,7 @@ class SecureSerialTalksProxy(Proxy):
             send_addr = self.send
         except (ConnectionFailedError,TimeoutError):
             object.__setattr__(self, '_compid', uuid)
+            print(traceback.format_exc())
             self.logger(WARNING, "Arduino {} is unreachable !".format(uuid), NotConnectedWarning)
             def trash_none(*args,**kwargs) : return None
             def trash_return(opcode, *args, **kwargs):
