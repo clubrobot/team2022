@@ -3,6 +3,7 @@
 
 #include <SerialTalks.h>
 #include <AX12.h>
+#include <Servo.h>
 
 #define RESET_OPCODE 0X12
 
@@ -26,6 +27,8 @@
 #define READ_SPEED_OPCODE 0X1F
 #define READ_TORQUE_OPCODE 0X2A
 
+#define SET_ANGLE_SERVO_OPCODE 0x2B
+
 void RESET(SerialTalks &inst, Deserializer &input, Serializer &output);
 
 void PING_AX(SerialTalks &inst, Deserializer &input, Serializer &output);
@@ -46,5 +49,7 @@ void SET_MAX_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output);
 void READ_POSITION(SerialTalks &inst, Deserializer &input, Serializer &output);
 void READ_SPEED(SerialTalks &inst, Deserializer &input, Serializer &output);
 void READ_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output);
+
+void SET_ANGLE_SERVO(SerialTalks &inst, Deserializer &input, Serializer &output);
 
 #endif //__INSTRUCTIONS_H__
