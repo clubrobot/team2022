@@ -1,9 +1,10 @@
-from setups.setup_display import *
+#from setups.setup_display import *
 from behaviours.robot_behaviour import RobotBehavior
-from common.components import LightButtonProxy, SwitchProxy
+#from common.components import LightButtonProxy, SwitchProxy
 from threading import Semaphore
+from common.gpiodevices import Switch, LightButton, gpio_pins
 from logs.log_manager import *
-
+from threading import Thread
 
 class ButtonsManager:
     RED_PIN = 18  # 1
@@ -26,7 +27,7 @@ class ButtonsManager:
 
     def team_stage(self):
         self.logger(INFO, "Team Stage")
-        ssd.set_message("set team")
+        #ssd.set_message("set team")
         self.blue.set_function(
             Thread(target=self.set_team_blue, daemon=True).start)
         self.orange.set_function(
@@ -35,14 +36,14 @@ class ButtonsManager:
     def set_team_yellow(self):
         self.logger(INFO, "Yellow Team")
         self.side = RobotBehavior.YELLOW_SIDE
-        ssd.set_message("team : y")
+        #ssd.set_message("team : y")
         self.green.set_function(
             Thread(target=self.odometry_stage, daemon=True).start)
 
     def set_team_blue(self):
         self.logger(INFO, "Blue Team")
         self.side = RobotBehavior.BLUE_SIDE
-        ssd.set_message("team : b")
+        #ssd.set_message("team : b")
         self.green.set_function(
             Thread(target=self.odometry_stage, daemon=True).start)
 
@@ -50,7 +51,7 @@ class ButtonsManager:
         self.logger(INFO, "Team Validation")
         self.logger(INFO, "Odometry Stage")
         self.auto.set_side(self.side)
-        ssd.set_message("set pos")
+        #ssd.set_message("set pos")
         self.blue.set_function(None)
         self.orange.set_function(None)
         self.green.set_function(
@@ -61,7 +62,7 @@ class ButtonsManager:
         self.auto.set_position()
 
         self.logger(INFO, "Tirret Stage")
-        ssd.set_message("tirret")
+        #ssd.set_message("tirret")
         self.tirette.set_function(
             Thread(target=self.urgency_stage, daemon=True).start)
         self.green.set_function(None)
@@ -69,7 +70,7 @@ class ButtonsManager:
     def urgency_stage(self):
         self.logger(INFO, "Tirret Validation")
         self.logger(INFO, "Urgency Button Stage")
-        ssd.set_message("urgency")
+        #ssd.set_message("urgency")
         self.urgency.set_function(
             Thread(target=self.positioning_stage, daemon=True).start)
 
@@ -81,7 +82,7 @@ class ButtonsManager:
 
     def ready_stage(self):
         self.logger(INFO, "Robot Ready !")
-        ssd.set_message("ready")
+        #ssd.set_message("ready")
         self.tirette.set_function(
             Thread(target=self.run_match, daemon=True).start)
         self.tirette.set_active_high(True)
@@ -102,16 +103,17 @@ class ButtonsManager:
         self.auto = auto
         self.side = None
 
-        self.red = LightButtonProxy(manager, self.RED_PIN, self.RED_LIGHT)
-        self.green = LightButtonProxy(
-            manager, self.GREEN_PIN, self.GREEN_LIGHT)
-        self.blue = LightButtonProxy(manager, self.BLUE_PIN, self.BLUE_LIGHT)
-        self.orange = LightButtonProxy(
-            manager, self.ORANGE_PIN, self.ORANGE_LIGHT)
-        self.tirette = SwitchProxy(
-            manager, self.TIRETTE_PIN, active_high=False)
-        self.urgency = SwitchProxy(
-            manager, self.URGENCY_PIN, active_high=False)
+        self.red = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, print("BTN1"))
+        self.green = LightButton(gpio_pins.INTER_2_PIN, gpio_pins.LED2_PIN, print("BTN1"));
+        self.blue = LightButton(gpio_pins.INTER_3_PIN, gpio_pins.LED3_PIN, print("BTN1"));
+        self.orange = LightButton(gpio_pins.INTER_4_PIN, gpio_pins.LED4_PIN, print("BTN1"));
+        self.tirette = Switch(gpio_pins.TIRETTE_PIN, print("tirette"))
+        #self.urgency = Switch(gpio_pins., print("tirette"))
+
+        # Init Logger
+        self.logger = LogManager().getlogger(self.__class__.__name__, Logger.SHOW, INFO)
+
+        self.p = Semaphore(0)
 
         # Init Logger
         self.logger = LogManager().getlogger(self.__class__.__name__, Logger.SHOW, INFO)
