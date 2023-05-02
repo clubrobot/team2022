@@ -12,6 +12,7 @@ LIBS = 	$(ESP_LIBS)/EEPROM \
 		$(COMMON)/SerialTalks \
 		$(COMMON)/CRC16 \
 		$(COMMON)/AX12 \
+		$(COMMON)/Servo \
 		instructions.cpp \
 		topics.cpp \
 		$(COMMON)/serialutils.cpp

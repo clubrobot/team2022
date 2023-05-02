@@ -1,9 +1,17 @@
 #include <Arduino.h>
 #include <SerialTalks.h>
 #include <AX12.h>
+#include <Servo.h>
+#include "PIN.h"
 #include "instructions.h"
 
 AX12 ax;
+
+Servo servo1;
+Servo servo2;
+Servo servo3;
+Servo servo4;
+
 
 void setup()
 {
@@ -33,8 +41,16 @@ void setup()
     talks.bind(READ_SPEED_OPCODE, READ_SPEED);
     talks.bind(READ_TORQUE_OPCODE, READ_TORQUE);
 
+    talks.bind(SET_ANGLE_SERVO_OPCODE, SET_ANGLE_SERVO);
+
     //Baud, rx, tx, control
     AX12::SerialBegin(1000000, 5);
+
+    // Pin
+    servo1.attach(PIN_SERVO1);
+    servo2.attach(PIN_SERVO2);
+    servo3.attach(PIN_SERVO3);
+    servo4.attach(PIN_SERVO4);
 }
 void loop(){ 
     talks.execute();

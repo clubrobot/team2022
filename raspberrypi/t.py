@@ -17,7 +17,7 @@ manager.connect(10)
 from setups.setup_serialtalks import *
 
 wb = WheeledBase(manager)
-
+wb.set_velocities(10,0)
 """ btn1 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, print("BTN1"));
 btn2 = LightButton(gpio_pins.INTER_2_PIN, gpio_pins.LED2_PIN, print("BTN2"));
 btn3 = LightButton(gpio_pins.INTER_3_PIN, gpio_pins.LED3_PIN, print("BTN3"));

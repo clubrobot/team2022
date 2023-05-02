@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from common.serialutils import Deserializer
-from daughter_cards.arduino import SecureArduino, INT, BYTE, FLOAT
+from daughter_cards.arduino import SecureArduino, INT, BYTE, FLOAT, USHORT
 import time
 
 # Instructions
@@ -26,6 +26,8 @@ READ_POSITION_OPCODE        = 0X1E
 READ_SPEED_OPCODE           = 0X1F
 READ_TORQUE_OPCODE          = 0X2A
 
+SET_ANGLE_SERVO_OPCODE      = 0x2B
+
 """
 This class acts as an interface between the raspeberry pi and the arduino.
 It contains methods relating to each action of the actuator.
@@ -37,6 +39,8 @@ class Actionneur(SecureArduino):
     
     def __init__(self, parent, uuid='actionneurs'):
         SecureArduino.__init__(self, parent, uuid, self.DEFAULT)
+    
+    def SetServoAngle(self, id, angle): self.send(SET_ANGLE_SERVO_OPCODE, BYTE(id), USHORT(angle))
 
 class AX12(SecureArduino):
     DEFAULT = {PING_AX_OPCODE: Deserializer(BYTE(0)), 

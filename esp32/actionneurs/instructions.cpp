@@ -2,6 +2,14 @@
 #include "instructions.h"
 
 extern AX12 ax;
+
+//Moche mais ça marche
+extern Servo servo1;
+extern Servo servo2;
+extern Servo servo3;
+extern Servo servo4;
+
+Servo servoList[4] = {servo1, servo2, servo3, servo4}; 
 /*
 All the instructions are with ax.attach this is for swaping between 
 differents ax12 that have differents ID
@@ -80,4 +88,12 @@ void READ_SPEED(SerialTalks &inst, Deserializer &input, Serializer &output){
 void READ_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output){
     ax.attach(input.read<byte>());
     output.write<int>(ax.readTorque());
+}
+
+void SET_ANGLE_SERVO(SerialTalks &inst, Deserializer &input, Serializer &output){
+    byte select = input.read<byte>();
+    uint16_t angle = input.read<uint16_t>();
+
+    if(select>4) return;
+    servoList[select].write(angle);
 }
