@@ -102,12 +102,17 @@ class ButtonsManager:
     def __init__(self, auto):
         self.auto = auto
         self.side = None
-
+        print("INIT")
         self.red = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, print("BTN1"))
-        self.green = LightButton(gpio_pins.INTER_2_PIN, gpio_pins.LED2_PIN, print("BTN1"));
-        self.blue = LightButton(gpio_pins.INTER_3_PIN, gpio_pins.LED3_PIN, print("BTN1"));
-        self.orange = LightButton(gpio_pins.INTER_4_PIN, gpio_pins.LED4_PIN, print("BTN1"));
+        self.green = LightButton(gpio_pins.INTER_2_PIN, gpio_pins.LED2_PIN, print("BTN2"))
+        self.blue = LightButton(gpio_pins.INTER_3_PIN, gpio_pins.LED3_PIN, print("BTN3"))
+        self.orange = LightButton(gpio_pins.INTER_4_PIN, gpio_pins.LED4_PIN, print("BTN4"))
         self.tirette = Switch(gpio_pins.TIRETTE_PIN, print("tirette"))
+        self.red.on()
+        self.green.on()
+        self.blue.on()
+        self.orange.on()
+        print("ALLUME")
         #self.urgency = Switch(gpio_pins., print("tirette"))
 
         # Init Logger
