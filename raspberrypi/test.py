@@ -1,100 +1,21 @@
-<<<<<<< HEAD
 from common.components import Manager
-from daughter_cards.wheeledbase import WheeledBase
-from daughter_cards.actionneur import Actionneur, AX12
-from tracking.libs.positionDetector import PositionDetector
-from daughter_cards.sensors import Sensors
-
-import time
-
-#Connect to the Raspberry Pi and the different modules
-manager = Manager("10.0.0.5")
-=======
-#import imp
-#from common.components import Manager
 #from daughter_cards.wheeledbase import WheeledBase
 #from daughter_cards.actionneur import Actionneur, AX12
 #from tracking.libs.positionDetector import PositionDetector
 #from daughter_cards.sensors import Sensors
-#from setups.setup_serialtalks import *
-#from listeners.sensor_listener import SensorListener
 import time
-
-from tracking.libs.positionDetectorMultiple import *
+#from tracking.libs.positionDetectorMultiple import *
 import math
+#from common.gpiodevices import Switch, LightButton, gpio_pins
+manager = Manager("10.0.0.3")
 
-posdetect=PositionDetectorMultiple()
-posdetect.addMarkerId(17)
-posdetect.init([0,0,0],math.radians(90),0)
-print("init")
-while True:
-    posdetect.update()
-    print(posdetect.markerPositions)
-
-
-#pince=Pince(manager)
-
-#pince.fermer()
-
-
-#Connect to the Raspberry Pi and the different modules
-<<<<<<< HEAD
-#manager = Manager("10.0.0.5")
-#manager.connect(7)
-
-#actio = Actionneur(manager)
-=======
-manager = Manager("172.31.27.119")
->>>>>>> 69ed6726760d7fd7c83c33b0243b26f6dc0d5b17
 manager.connect(7)
 
 from setups.setup_serialtalks import *
 
-actio = Actionneur(manager)
-arm = AX12(3, manager)
+from managers.buttons_manager import ButtonsManager
+ButtonsManager(None).begin()
 
-arm.moveSpeed(500, 200)
-
-
-sensors = Sensors(manager, "sensors")
->>>>>>> 046d82180581c6b94e2080ca61e5f91181071413
-
-<<<<<<< HEAD
-while 1:
-    print(sensors.test())
-=======
-print(sensors.is_ready())
-print(sensors.check_errors())
-
-<<<<<<< HEAD
-#pince = AX12(3, manager) #AX12 avec l'ID 1
-#pince.setMaxTorque(1023)
-#pince.turn(-200)
-=======
-print(sensors.get_sensor1_range())
->>>>>>> 046d82180581c6b94e2080ca61e5f91181071413
->>>>>>> 69ed6726760d7fd7c83c33b0243b26f6dc0d5b17
-
-
-<<<<<<< HEAD
-#1 elevateur
-#3 pince
-#elevator = AX12(1, manager, "actionneurs")
-#elevator.setEndlessMode(True)
-#elevator.setMaxTorque(1023)
-#elevator.turn(250)
-#elevator.move(200)
-#print("fin",elevator.ping())
-#while True:
-#    print(elevator.readPosition())
-#for i in range(0,253):
-    #elevator = AX12(i, manager, "actionneurs")
-    #b=elevator.ping()
-    
-    #if b:
-    #    print(i,b)
-=======
->>>>>>> 046d82180581c6b94e2080ca61e5f91181071413
 #LEFTCODEWHEEL_RADIUS_VALUE              = 21.90460280828869
 #RIGHTCODEWHEEL_RADIUS_VALUE         = 22.017182927267537
 #ODOMETRY_AXLETRACK_VALUE            = 357.5722465739272
