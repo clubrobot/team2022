@@ -3,6 +3,7 @@
 
 import time
 import math
+import numpy as np
 
 from common.serialutils import Deserializer
 from common.serialtalks import BYTE, LONG, FLOAT
@@ -201,10 +202,10 @@ class WheeledBase(SecureArduino):
         else:
             self.send(START_TURNONTHESPOT_DIR_OPCODE, FLOAT(theta), BYTE({'clock':0, 'trig':1}[direction]))
 
-    def isarrived(self, **kwargs):
+    def isarrived(self,raiseSpinUrgency=True, **kwargs):
         output = self.execute(POSITION_REACHED_OPCODE, **kwargs)
         isarrived, spinurgency = output.read(BYTE, BYTE)
-        if bool(spinurgency):
+        if bool(spinurgency)and raiseSpinUrgency:
             raise RuntimeError('spin urgency')
         return bool(isarrived)
 
@@ -235,13 +236,44 @@ class WheeledBase(SecureArduino):
 
         # Go to the setpoint position
         self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
-        self.wait(**kwargs)
+        #print("fIN",self.isarrived())
+        #self.wait(**kwargs)
 
         # Get the setpoint orientation
         if theta is not None:
             self.turnonthespot(theta)
             self.wait(**kwargs)
 
+
+    def goto_stop(self, x, y,sensors, theta=None, direction=None, finalangle=None, lookahead=None, lookaheadbis=None, linvelmax=None, angvelmax=None, **kwargs):
+        # Compute the preferred direction if not set
+        if direction is None:
+            x0, y0, theta0 = self.get_position()
+            if math.cos(math.atan2(y - y0, x - x0) - theta0) >= 0:
+                direction = 'forward'
+            else:
+                direction = 'backward'
+
+        # Go to the setpoint position
+        self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
+        interrupt=False
+        while not self.isarrived(raiseSpinUrgency=False):
+            
+            if(np.min(sensors.get_all())<100):
+                interrupt=True
+                self.stop()
+                print("arret")
+            elif interrupt:
+                interrupt=False
+                self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
+        
+        print("ARRIVE")
+        
+        # Get the setpoint orientation
+        if theta is not None:
+            self.turnonthespot(theta)
+            self.wait(**kwargs)
+            
     def stop(self):
         self.set_openloop_velocities(0, 0)
 
