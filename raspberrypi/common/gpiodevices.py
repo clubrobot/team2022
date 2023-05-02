@@ -1,4 +1,5 @@
-from RPi.GPIO import GPIO
+#from RPi.GPIO import GPIO
+import RPi.GPIO as GPIO
 from gpiozero import Button
 
 class gpio_pins():
