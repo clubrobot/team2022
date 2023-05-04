@@ -53,7 +53,7 @@ void setup()
     Serial.begin(SERIALTALKS_BAUDRATE);
     talks.begin(Serial);
     topics.begin(talks);
-
+    
     // I2C Communication
     Wire.begin(SENSORS_SDA, SENSORS_SCL); //SDA SCL
     
@@ -91,6 +91,7 @@ void setup()
         {
             vl53_status[count++] = 1;
         }
+        Serial.println(vl53_status[count]);
     }
     count = 0;
 
