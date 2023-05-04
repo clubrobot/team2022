@@ -1,6 +1,6 @@
 #from RPi.GPIO import GPIO
 import RPi.GPIO as GPIO
-from gpiozero import Button
+#from gpiozero import Button
 
 class gpio_pins():
     INTER_1_PIN = 12
@@ -118,3 +118,9 @@ class LightButton(Device):
 
         Device.list_pin[self.light_pin] = False
         GPIO.cleanup(self.light_pin)
+
+if __name__ == "__main__":
+    btn1 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, print("TEST BTN1"))
+    btn1.on()
+    while 1:
+        print(btn1.state)
