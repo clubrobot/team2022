@@ -82,14 +82,14 @@ class ButtonsManager:
 
     def ready_stage(self):
         self.logger(INFO, "Robot Ready !")
-        #ssd.set_message("ready")
+        print("ready")
         self.tirette.set_function(
             Thread(target=self.run_match, daemon=True).start)
         self.tirette.set_active_high(True)
 
     def run_match(self):
-        self.logger(INFO, "MATCH LAUNCHED !!!")
-        self.tirette.close()
+        #self.logger(INFO, "MATCH LAUNCHED !!!")
+        self.tirette.close();print("MATCH")
         self.urgency.close()
         self.red.close()
         self.blue.close()
@@ -103,10 +103,10 @@ class ButtonsManager:
         self.auto = auto
         self.side = None
 
-        self.red = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, print("BTN1"))
-        self.green = LightButton(gpio_pins.INTER_2_PIN, gpio_pins.LED2_PIN, print("BTN1"));
-        self.blue = LightButton(gpio_pins.INTER_3_PIN, gpio_pins.LED3_PIN, print("BTN1"));
-        self.orange = LightButton(gpio_pins.INTER_4_PIN, gpio_pins.LED4_PIN, print("BTN1"));
+        #self.red = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, print("BTN1"))
+        #self.green = LightButton(gpio_pins.INTER_2_PIN, gpio_pins.LED2_PIN, print("BTN1"));
+        #self.blue = LightButton(gpio_pins.INTER_3_PIN, gpio_pins.LED3_PIN, print("BTN1"));
+        #self.orange = LightButton(gpio_pins.INTER_4_PIN, gpio_pins.LED4_PIN, print("BTN1"));
         self.tirette = Switch(gpio_pins.TIRETTE_PIN, print("tirette"))
         #self.urgency = Switch(gpio_pins., print("tirette"))
 
