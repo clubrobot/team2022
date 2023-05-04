@@ -121,7 +121,8 @@ class LightButton(Device):
 
 if __name__ == "__main__":
     from time import sleep
-    btn1 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, btn1.switch())
+    btn1 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, None))
+    btn1.set_function(btn1.switch())
     btn1.on()
     while 1:
         print(btn1.state)
