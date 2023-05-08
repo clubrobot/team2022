@@ -3,22 +3,22 @@ import RPi.GPIO as GPIO
 #from gpiozero import Button
 
 class gpio_pins():
-    INTER_1_PIN = 12
-    INTER_2_PIN = 32
-    INTER_3_PIN = 31
-    INTER_4_PIN = 29
-    LED1_PIN = 16
+    INTER_1_PIN = 18
+    INTER_2_PIN = 12
+    INTER_3_PIN = 6
+    INTER_4_PIN = 5
+    LED1_PIN = 12
     LED2_PIN = 4
-    LED3_PIN = 40
-    LED4_PIN = 36
+    LED3_PIN = 21
+    LED4_PIN = 16
 
-    ALED2_PIN = 22
-    ALED3_PIN = 18
-    ALED1_PIN = 11
+    ALED2_PIN = 17
+    ALED3_PIN = 25
+    ALED1_PIN = 24
 
-    TIRETTE_PIN = 37
-    URGENCE_PIN = 38
-    DEV_MODE_PIN = 18
+    TIRETTE_PIN = 26
+    URGENCE_PIN = 20
+    DEV_MODE_PIN = 22
 
 class Device:
     list_pin = [False] * 59
@@ -121,9 +121,11 @@ class LightButton(Device):
 
 if __name__ == "__main__":
     from time import sleep
-    btn1 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, None))
+    btn1 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, None)
     btn1.set_function(btn1.switch())
     btn1.on()
+
+    tirette = LightButton(gpio_pins.TIRETTE_PIN, gpio_pins.ALED1_PIN, print("Tirette"))
     while 1:
         print(btn1.state)
         sleep(0.1)
