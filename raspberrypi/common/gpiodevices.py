@@ -62,7 +62,7 @@ class LightButton(Device):
             self.input_pin = input_pin
             self.light_pin = light_pin
             
-            self.button = Button(self.input_pin, pull_up=None, active_state=False, bounce_time=500)
+            self.button = Button(self.input_pin, pull_up=None, active_state=False, bounce_time=0.01)
             self.led = LED(self.light_pin)
             
             self.button.when_pressed = self.function
@@ -95,7 +95,7 @@ class LightButton(Device):
 
     def set_function(self, function):
         self.function = function
-
+        self.button.when_pressed = self.function
 
     def close(self):
         Device.list_pin[self.input_pin] = False
@@ -116,5 +116,5 @@ if __name__ == "__main__":
     tirette = Switch(gpio_pins.TIRETTE_PIN, test, True)
     
     while 1:
-        print(tirette.button.is_pressed)
+        print(btn1.button.is_pressed)
         sleep(0.1)
