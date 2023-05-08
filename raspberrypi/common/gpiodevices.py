@@ -113,6 +113,18 @@ if __name__ == "__main__":
     btn1.set_function(btn1.switch)
     btn1.on()
 
+    btn2 = LightButton(gpio_pins.INTER_2_PIN, gpio_pins.LED2_PIN, None)
+    btn2.set_function(btn2.switch)
+    btn2.on()
+
+    btn3 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED3_PIN, None)
+    btn3.set_function(btn3.switch)
+    btn3.on()
+
+    btn4 = LightButton(gpio_pins.INTER_4_PIN, gpio_pins.LED4_PIN, None)
+    btn4.set_function(btn4.switch)
+    btn4.on()
+
     tirette = Switch(gpio_pins.TIRETTE_PIN, test, True)
     
     while 1:
