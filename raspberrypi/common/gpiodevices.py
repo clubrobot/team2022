@@ -36,7 +36,7 @@ class Switch(Device):
             self.state = False
             Device.list_pin[input_pin] = True
             self.input_pin = input_pin
-            self.button = Button(input_pin, pull_up=True, active_state=active_high)
+            self.button = Button(input_pin, pull_up=None, active_state=active_high)
             self.button.when_pressed = self.function
 
         else:
@@ -62,7 +62,7 @@ class LightButton(Device):
             self.input_pin = input_pin
             self.light_pin = light_pin
             
-            self.button = Button(self.input_pin, pull_up=False, active_state=False, bounce_time=500)
+            self.button = Button(self.input_pin, pull_up=None, active_state=False, bounce_time=500)
             self.led = LED(self.light_pin)
             
             self.button.when_pressed = self.function
