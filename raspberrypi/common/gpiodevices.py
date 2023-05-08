@@ -1,6 +1,8 @@
+
 #from RPi.GPIO import GPIO
 import RPi.GPIO as GPIO
-#from gpiozero import Button
+from gpiozero import Button
+
 
 class gpio_pins():
     INTER_1_PIN = 18
@@ -73,12 +75,14 @@ class LightButton(Device):
             self.kwargs = kwargs
             self.input_pin = input_pin
             self.light_pin = light_pin
+            
             if GPIO.getmode() != GPIO.BCM:
                 GPIO.setmode(GPIO.BCM)
             GPIO.setup(self.input_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.setup(self.light_pin, GPIO.OUT)
             GPIO.add_event_detect(
                 self.input_pin, GPIO.FALLING, callback=self.launch_function, bouncetime=500)
+            
         else:
             raise RuntimeError('pin already in use')
 
@@ -125,7 +129,8 @@ if __name__ == "__main__":
     btn1.set_function(btn1.switch())
     btn1.on()
 
-    tirette = LightButton(gpio_pins.TIRETTE_PIN, gpio_pins.ALED1_PIN, print("Tirette"))
+    tirette = Switch(gpio_pins.TIRETTE_PIN, print("Tirette"), True)
+    
     while 1:
-        print(btn1.state)
+        print(tirette.button.is_pressed())
         sleep(0.1)
