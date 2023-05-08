@@ -9,7 +9,7 @@ class gpio_pins():
     INTER_2_PIN = 12
     INTER_3_PIN = 6
     INTER_4_PIN = 5
-    LED1_PIN = 12
+    LED1_PIN = 23
     LED2_PIN = 4
     LED3_PIN = 21
     LED4_PIN = 16
@@ -62,7 +62,7 @@ class LightButton(Device):
             self.input_pin = input_pin
             self.light_pin = light_pin
             
-            self.button = Button(self.input_pin, pull_up=True, active_state=True, bouncetime=500)
+            self.button = Button(self.input_pin, pull_up=False, active_state=False, bounce_time=500)
             self.led = LED(self.light_pin)
             
             self.button.when_pressed = self.function
@@ -71,7 +71,7 @@ class LightButton(Device):
             raise RuntimeError('pin already in use')
 
     def launch_function(self):
-            self.function()
+        self.function()
 
         if self.auto_switch:
             self.switch()
@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     from time import sleep
     btn1 = LightButton(gpio_pins.INTER_1_PIN, gpio_pins.LED1_PIN, None)
-    btn1.set_function(btn1.switch())
+    btn1.set_function(btn1.switch)
     btn1.on()
 
     tirette = Switch(gpio_pins.TIRETTE_PIN, test, True)
