@@ -110,7 +110,8 @@ if not ccw:
 
 lticks0, rticks0 = wheeledbase.get_codewheels_counter()
 wheeledbase.reset()
-length=600
+length=400
+
 
 for k in range(abs(M)):
     if ccw:

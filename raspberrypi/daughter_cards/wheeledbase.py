@@ -238,7 +238,9 @@ class WheeledBase(SecureArduino):
         self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
         #print("fIN",self.isarrived())
         #self.wait(**kwargs)
-
+        while not self.isarrived():
+            #print(self.get_position())
+            True
         # Get the setpoint orientation
         if theta is not None:
             self.turnonthespot(theta)
@@ -246,6 +248,10 @@ class WheeledBase(SecureArduino):
 
 
     def goto_stop(self, x, y,sensors, theta=None, direction=None, finalangle=None, lookahead=None, lookaheadbis=None, linvelmax=None, angvelmax=None, **kwargs):
+        if(sensors is None):
+            print("None")
+            self.goto(x,y,theta=theta,direction=direction,finalangle=finalangle)
+            return
         # Compute the preferred direction if not set
         if direction is None:
             x0, y0, theta0 = self.get_position()

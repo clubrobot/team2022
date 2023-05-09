@@ -9,7 +9,9 @@ from robots.team2023.ascenseur import Ascenseur
 from robots.team2023.pince import Pince
 from daughter_cards.sensors import Sensors
 from threading import Thread
-from RecupPile import RecupPile
+from robots.team2023.RecupPile import RecupPile
+import os
+
 COLOR = RobotBehavior.YELLOW_SIDE
 PREPARATION = False
 
@@ -33,8 +35,12 @@ class Bornibus(RobotBehavior):
 
         #self.avoidance_behaviour = AviodanceBehaviour(
         #    wheeledbase, roadmap, robot_beacon, sensors)
+        for root, dirs, files in os.walk("."):
+            for file in files:
+                if file == "map_2023.ggb":
+                    roadmap_path = os.path.join(root, file)
         
-        self.geo  = Geogebra("robots/team2023/map_2023.ggb")
+        self.geo  = Geogebra(roadmap_path)#"robots/team2023/map_2023.ggb"
         self.road = RoadMap.load(self.geo)
         self.side = RobotBehavior.BLUE_SIDE
 
@@ -42,8 +48,8 @@ class Bornibus(RobotBehavior):
         #self.display = display
         self.pince= Pince(manager)
         self.ascenseur= Ascenseur(manager)
-        self.sensors=Sensors(manager,"sensors")
-
+        #self.sensors=Sensors(manager,"sensors")
+        self.sensors=None
         self.blue=self.side==RobotBehavior.BLUE_SIDE
 
         self.automate = []#get 3 couleurs puis gerber puis poser cerises
@@ -57,6 +63,7 @@ class Bornibus(RobotBehavior):
         self.automatestep = 0
 
         self.p = Semaphore(0)
+        print("fin")
 
     def make_decision(self):
         """This function make a decision to choose the next action to play. Today it basically return th next action on list
@@ -122,7 +129,7 @@ class Bornibus(RobotBehavior):
         """
 
         Thread(target=self.stop_match).start()
-        self.display.start()
+        #self.display.start()
 
     def stop_procedure(self):
         """Optionnal function running at the end of match. Usually used to check if the funny action is end
