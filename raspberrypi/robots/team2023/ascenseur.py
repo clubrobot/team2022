@@ -3,7 +3,7 @@ from daughter_cards.actionneur import Actionneur, AX12
 class Ascenseur:
 
     def __init__(self,manager):
-        self.asc = AX12(1, manager, "actionneurs")
+        self.asc = AX12(3, manager, "actionneurs")
         self.asc.setEndlessMode(True)
         self.asc.setMaxTorque(1023)
         self.v_bas=100

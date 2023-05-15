@@ -41,14 +41,16 @@ class Actionneur(SecureArduino):
         SecureArduino.__init__(self, parent, uuid, self.DEFAULT)
     
     def SetServoAngle(self, id, angle): self.send(SET_ANGLE_SERVO_OPCODE, BYTE(id), USHORT(angle))
-
+master=None
 class AX12(SecureArduino):
     DEFAULT = {PING_AX_OPCODE: Deserializer(BYTE(0)), 
             READ_POSITION_OPCODE: Deserializer(BYTE(0)), 
             READ_SPEED_OPCODE: Deserializer(BYTE(0)), 
             READ_TORQUE_OPCODE: Deserializer(BYTE(0)), 
             }
+    
     def __init__(self, id, parent, uuid='actionneurs'):
+        
         SecureArduino.__init__(self, parent, uuid, self.DEFAULT)
         self.id = id
     

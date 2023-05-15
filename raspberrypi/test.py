@@ -16,7 +16,6 @@ manager = Manager("10.0.0.2")
 manager.connect(7)
 
 from setups.setup_serialtalks import *
-
 pince=Pince(manager)
 #asc=Ascenseur(manager)
 print("a")
@@ -28,7 +27,7 @@ pince.fermer()
 #print("bas")
 #asc.bas()
 wb=WheeledBase(manager)
-
+print()
 """
 print(wb.left_codewheel_radius.get())
 print(wb.right_wheel_radius.get())
@@ -52,7 +51,7 @@ wb.set_position(0,1000,0)
     #wb.goto_stop(1000,1000,None,theta=-i*math.pi)
 """
 #wb.turnonthespot(math.pi)
-wb.save_parameters()
+#wb.save_parameters()
 #while True:
 #    True
     #print(wb.get_position())

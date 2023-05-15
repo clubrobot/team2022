@@ -59,7 +59,7 @@ class Robot:
             
 
     def start(self):
-        orange_button=LightButton(gpio_pins.INTER_2_PIN,gpio_pins.LED2_PIN)#orange:2 vert:1 bleu:3 rouge :4
+        orange_button=LightButton(gpio_pins.INTER_4_PIN,gpio_pins.LED4_PIN)#orange:2 vert:1 bleu:3 rouge :4
         orange_button.set_function(orange_button.switch)
         orange_button.on()
         tirette=Switch(gpio_pins.TIRETTE_PIN)
@@ -91,16 +91,25 @@ manager = Manager("10.0.0.2")
 
 manager.connect(7)
 
+#1 VERIF QUE TURN ON THE SPOT s'arrète bien avec les capteurs
+#2 TUNER LA DISTANCE D'ARRET
+#3 FAIRE EXECUTER LE CODE EN LOCAL sur le robot
+#4 pouvoir utiliser l'ascenseur et la pince 
+#5 améliorer a stratégie 
+
+
 from setups.setup_serialtalks import *
 green_button=LightButton(gpio_pins.INTER_1_PIN,gpio_pins.LED1_PIN)#orange:2 vert:1 bleu:3 rouge :4
 green_button.set_function(green_button.switch)
 blue_button=LightButton(gpio_pins.INTER_3_PIN,gpio_pins.LED3_PIN)#orange:2 vert:1 bleu:3 rouge :4
 blue_button.set_function(blue_button.switch)
+blue_button.on()
+green_button.on()
 bornibus=None
 print("CHOIX COULEUR")
 initOk=False
 while not initOk:
-#bornibus=Robot(manager=manager,side="BLUE")
+    #bornibus=Robot(manager=manager,side="BLUE")
     while(bornibus==None):
         if(green_button.button.is_pressed):
             bornibus=Robot(manager=manager,side="GREEN")
@@ -112,5 +121,5 @@ while not initOk:
             green_button.off()
             blue_button.on()
             print("team bleu")
-
-        initOk=bornibus.start()
+    
+    initOk=bornibus.start()

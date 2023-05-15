@@ -264,12 +264,19 @@ class WheeledBase(SecureArduino):
         self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
         interrupt=False
         while not self.isarrived(raiseSpinUrgency=False):
-            if(np.min(sensors.get_all())<500):
+            if(np.min(sensors.get_all()[0:4])<500 or np.min(sensors.get_all()[4:])<300):
                 interrupt=True
                 self.stop()
                 #print("arret")
             elif interrupt:
                 interrupt=False
+                print("Reprise")
+                if direction is None:
+                    x0, y0, theta0 = self.get_position()
+                    if math.cos(math.atan2(y - y0, x - x0) - theta0) >= 0:
+                        direction = 'forward'
+                    else:
+                        direction = 'backward'
                 self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
             
         print("ARRIVE")
