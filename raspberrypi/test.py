@@ -1,6 +1,6 @@
 from common.components import Manager
 from daughter_cards.wheeledbase import WheeledBase
-#from daughter_cards.actionneur import Actionneur, AX12
+from daughter_cards.actionneur import Actionneur
 #from tracking.libs.positionDetector import PositionDetector
 from daughter_cards.sensors import Sensors
 import time
@@ -16,8 +16,9 @@ manager = Manager("10.0.0.2")
 manager.connect(7)
 
 from setups.setup_serialtalks import *
-pince=Pince(manager)
-#asc=Ascenseur(manager)
+actionneur = Actionneur(manager, "actionneurs")
+pince=Pince(actionneur)
+#asc=Ascenseur(actionneur)
 print("a")
 #pince.ouvrir()
 #asc.bas()

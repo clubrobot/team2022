@@ -1,19 +1,19 @@
-from daughter_cards.actionneur import Actionneur, AX12
+from daughter_cards.actionneur import Actionneur
 
 class Ascenseur:
 
     def __init__(self,manager):
-        self.asc = AX12(3, manager, "actionneurs")
+        self.asc = manager.AX12(3, manager)
         self.asc.setEndlessMode(True)
         self.asc.setMaxTorque(1023)
         self.v_bas=100
 
     def rouler(self):
-        end=300
+        end=450
         self.asc.move(end)
         self.asc.readPosition()
         while(abs(self.asc.readPosition()-end)>5 ):
-            print(abs(self.asc.readPosition()-end),self.asc.readSpeed())
+            #print(abs(self.asc.readPosition()-end),self.asc.readSpeed())
             continue
 
 #300 haut de la pince bas du magasin

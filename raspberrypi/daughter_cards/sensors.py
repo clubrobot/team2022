@@ -43,8 +43,8 @@ class Sensors(SecureArduino):
         self.last_time = None
 
         try:
-            self.addTopic(GET_ALL_TOPIC_OPCODE,
-                      self.get_all_sensors_handler, "sensors", self.TIMESTEP)
+            #self.addTopic(GET_ALL_TOPIC_OPCODE,
+            #         self.get_all_sensors_handler, "sensors", self.TIMESTEP)
             print("PASSE SENSORS")
         except:
             print("ERROR SENSORS")
@@ -154,6 +154,7 @@ class ThreadSensors():
             self.sensors.sensor6=self.sensors.get_sensor6_range()
             self.sensors.sensor7=self.sensors.get_sensor7_range()
             self.sensors.sensor8=self.sensors.get_sensor8_range()
+            
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 from common.components import Manager
+from daughter_cards.actionneur import Actionneur
 from daughter_cards.wheeledbase import WheeledBase
 from robots.team2023.ascenseur import Ascenseur
 from robots.team2023.pince import Pince
@@ -25,11 +26,12 @@ class Robot:
         self.road = RoadMap.load(self.geo)
         self.side = side
 
+        self.actionneur = Actionneur(manager, "actionneurs")
         self.wheeledbase = WheeledBase(manager)
         #self.display = display
-        self.pince= Pince(manager)
+        self.pince= Pince(self.actionneur)
         self.ascenseur=None
-        #self.ascenseur= Ascenseur(manager)
+        self.ascenseur= Ascenseur(self.actionneur)
         self.sensors=Sensors(manager,"sensors")
         self.threadSensors=ThreadSensors(self.sensors,self)
 
@@ -87,7 +89,7 @@ class Robot:
 
 
 from common.components import Manager
-manager = Manager("10.0.0.2")
+manager = Manager("localhost")
 
 manager.connect(7)
 

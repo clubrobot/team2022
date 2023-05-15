@@ -1,9 +1,9 @@
-from daughter_cards.actionneur import Actionneur, AX12
+from daughter_cards.actionneur import Actionneur
 import time
 class Pince:
 
     def __init__(self,manager):
-        self.pince = AX12(1, manager, "actionneurs")
+        self.pince = manager.AX12(1, manager)
         self.pince.setEndlessMode(False)
         self.pince.setAngleLimit(0,1023)
         self.pince.setMaxTorque(1023)

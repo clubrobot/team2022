@@ -16,7 +16,7 @@ class RecupPile:
         pass
 
     def procedure(self, robot):
-        #self.asc.rouler()
+        self.asc.rouler()
         rPos=np.array(self.wb.get_position()[:2])
         vecPos=self.pos-rPos[:2]
         length=math.sqrt(vecPos[0]**2+vecPos[1]**2)
@@ -28,13 +28,13 @@ class RecupPile:
             self.wb.goto_stop(stop[0],stop[1],robot.sensors,theta=ang)
             print(self.wb.get_position(),stop)
         self.pince.ouvrir()
-        #self.asc.bas()
+        self.asc.bas()
         stop=vecPos/length*(length-self.radiusPince)+rPos
         self.wb.goto_stop(stop[0],stop[1],robot.sensors,theta=ang)
         print(self.wb.get_position(),stop)
         sleep(2)
         self.pince.fermer()
-        #self.asc.rouler()
+        self.asc.rouler()
 
         #va poser à la fin
         rPos=np.array(self.wb.get_position()[:2])
@@ -48,9 +48,9 @@ class RecupPile:
         self.wb.goto_stop(stop[0],stop[1],robot.sensors,theta=ang)
         print(self.wb.get_position(),stop)
         sleep(4)
-        #self.asc.bas()
+        self.asc.bas()
         self.pince.ouvrir()
-        #self.asc.rouler()
+        self.asc.rouler()
         
         #si ascenseur pas besoin de ca
         #self.wb.set_openloop_velocities(-500,-500)
