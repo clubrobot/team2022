@@ -2,11 +2,15 @@ from common.components import Manager
 from daughter_cards.wheeledbase import WheeledBase
 from robots.team2023.ascenseur import Ascenseur
 from robots.team2023.pince import Pince
-from daughter_cards.sensors import Sensors
+from daughter_cards.sensors import Sensors,ThreadSensors
 from threading import Thread
 from common.geogebra import Geogebra
 from common.roadmap import RoadMap
+from common.gpiodevices import Switch,LightButton,gpio_pins
 from robots.team2023.RecupPile import RecupPile
+from time import sleep,time
+import numpy as np
+
 import os
 import math
 
@@ -24,51 +28,89 @@ class Robot:
         self.wheeledbase = WheeledBase(manager)
         #self.display = display
         self.pince= Pince(manager)
-        self.ascenseur= Ascenseur(manager)
-        #self.sensors=Sensors(manager,"sensors")
-        self.sensors=None
+        self.ascenseur=None
+        #self.ascenseur= Ascenseur(manager)
+        self.sensors=Sensors(manager,"sensors")
+        self.threadSensors=ThreadSensors(self.sensors,self)
+
+        #self.sensors=None
         self.blue=self.side=="BLUE"
 
-        h=100
-        v=300
+        h=115
+        v=220
 
 
         self.automate = []#get 3 couleurs puis gerber puis poser cerises
         if(self.blue):#couleur impaire
-            born.wheeledbase.set_position(3000-h/2,v/2,-math.pi/2)
+            self.wheeledbase.set_position(v/2,3000-h/2-50,-math.pi/2)
             self.base=self.geo.get('ZB1')
             self.end=self.geo.get('ZB2')
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose1'),self.geo.get('ZB1'),self.pince))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir1'),self.geo.get('ZB1'),self.pince))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune1'),self.geo.get('ZB1'),self.pince))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose1'),np.array(self.base)+(-90,80),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune1'),np.array(self.base)+(110,80),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir1'),np.array(self.base)+(310,80),self.pince,self.ascenseur))
+            
         else:#couleur paire
             self.base=self.geo.get('ZV1')
             self.end=self.geo.get('ZV2')
-            born.wheeledbase.set_position(3000-h/2,2000-v/2,-math.pi/2)
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose2'),self.geo.get('ZV1'),self.pince))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir2'),self.geo.get('ZV1'),self.pince))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune2'),self.geo.get('ZV1'),self.pince))
-
+            self.wheeledbase.set_position(2000-v/2,3000-h/2-50,-math.pi/2)
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose2'),np.array(self.base)+(90,80),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune2'),np.array(self.base)+(-90,80),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir2'),np.array(self.base)+(-270,80),self.pince,self.ascenseur))
+            
 
     def start(self):
-        self.wheeledbase.goto_sensors(self.centre[0],self.centre[1],sensors=self.sensors)
+        orange_button=LightButton(gpio_pins.INTER_2_PIN,gpio_pins.LED2_PIN)#orange:2 vert:1 bleu:3 rouge :4
+        orange_button.set_function(orange_button.switch)
+        orange_button.on()
+        tirette=Switch(gpio_pins.TIRETTE_PIN)
+        self.wheeledbase.goto_stop(self.base[0],self.base[1],sensors=self.sensors)
         #attend tirette
-        print("A")
+        while not tirette.button.is_pressed:
+            if(orange_button.button.is_pressed):
+                return False
+            sleep(0.003)
+        
+        debut=time()
+        print("tiretté")
         self.automate[0].procedure(self)
+        if(orange_button.button.is_pressed):
+            return False
         self.automate[1].procedure(self)
-        print("cc")
-        self.wheeledbase.goto_sensors(self.end[0],self.end[1],sensors=self.sensors)
-    
+        if(orange_button.button.is_pressed):
+            return False
+        self.automate[2].procedure(self)
+        if(orange_button.button.is_pressed):
+            return False
+        self.wheeledbase.goto_stop(self.end[0],self.end[1],sensors=self.sensors)
+        self.threadSensors.looping=False
+        return True
 
 
 from common.components import Manager
-manager = Manager("10.0.0.3")
+manager = Manager("10.0.0.2")
 
 manager.connect(7)
 
 from setups.setup_serialtalks import *
+green_button=LightButton(gpio_pins.INTER_1_PIN,gpio_pins.LED1_PIN)#orange:2 vert:1 bleu:3 rouge :4
+green_button.set_function(green_button.switch)
+blue_button=LightButton(gpio_pins.INTER_3_PIN,gpio_pins.LED3_PIN)#orange:2 vert:1 bleu:3 rouge :4
+blue_button.set_function(blue_button.switch)
+bornibus=None
+print("CHOIX COULEUR")
+initOk=False
+while not initOk:
+#bornibus=Robot(manager=manager,side="BLUE")
+    while(bornibus==None):
+        if(green_button.button.is_pressed):
+            bornibus=Robot(manager=manager,side="GREEN")
+            blue_button.off()
+            green_button.on()
+            print("TEAM VERTE")
+        elif(blue_button.button.is_pressed):
+            bornibus=Robot(manager=manager,side="BLUE")
+            green_button.off()
+            blue_button.on()
+            print("team bleu")
 
-born=Robot(manager=manager,side="BLUE")
-
-print("cree")
-born.start()
+        initOk=bornibus.start()

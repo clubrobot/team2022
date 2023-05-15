@@ -55,9 +55,11 @@ class Bornibus(RobotBehavior):
         self.automate = []#get 3 couleurs puis gerber puis poser cerises
         if(self.blue):#couleur impaire
             self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose1'),self.geo.get('ZB1'),self.pince))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune1'),self.geo.get('ZB1'),self.pince))
             self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir1'),self.geo.get('ZB1'),self.pince))
         else:#couleur paire
             self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose2'),self.geo.get('ZV1'),self.pince))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune2'),self.geo.get('ZV1'),self.pince))
             self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir2'),self.geo.get('ZV1'),self.pince))
 
         self.automatestep = 0

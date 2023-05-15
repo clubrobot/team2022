@@ -1,5 +1,5 @@
 from daughter_cards.actionneur import Actionneur, AX12
-
+import time
 class Pince:
 
     def __init__(self,manager):
@@ -8,11 +8,19 @@ class Pince:
         self.pince.setMaxTorque(1023)
 
     def fermer(self):
-        self.pince.move(800)
-
+        end=310
+        deb=time.time()
+        self.pince.move(end)
+        self.pince.readPosition()
+        while((abs(self.pince.readPosition()-end)>5 or self.pince.readSpeed()>0) and time.time()-deb<3):
+            continue
     def ouvrir(self):
-        #TODO
-        return "TODO"
+         end=0
+         deb=time.time()
+         self.pince.move(end)
+         self.pince.readPosition()
+         while((abs(self.pince.readPosition()-end)>5 or self.pince.readSpeed()>0) and time.time()-deb<3):
+            continue
 
     def isFerme(self):
         return "TODO"

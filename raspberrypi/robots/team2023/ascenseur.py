@@ -6,12 +6,25 @@ class Ascenseur:
         self.asc = AX12(1, manager, "actionneurs")
         self.asc.setEndlessMode(True)
         self.asc.setMaxTorque(1023)
-        self.v_bas=0
+        self.v_bas=100
+
+    def rouler(self):
+        end=300
+        self.asc.move(end)
+        self.asc.readPosition()
+        while(abs(self.asc.readPosition()-end)>5 ):
+            print(abs(self.asc.readPosition()-end),self.asc.readSpeed())
+            continue
 
 #300 haut de la pince bas du magasin
     def bas(self):
-        #print(self.asc.readPosition())
-        self.asc.move(self.v_bas)
+        end=self.v_bas
+        self.asc.move(100)
+        self.asc.readPosition()
+        while(abs(self.asc.readPosition()-end)>5 or self.asc.readSpeed()>0):
+            
+            print(self.asc.readPosition(),self.asc.readTorque())
+            continue
         
             
         #self.asc.move(-500)

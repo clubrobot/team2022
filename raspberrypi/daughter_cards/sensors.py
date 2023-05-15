@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from collections.abc import Callable, Iterable, Mapping
+from typing import Any
 from common.serialutils import Deserializer
 from daughter_cards.arduino import SecureArduino, TopicHandler, USHORT, BYTE
 import time
@@ -56,6 +58,8 @@ class Sensors(SecureArduino):
         self.sensor6 = self.MAX_DIST
         self.sensor7 = self.MAX_DIST
         self.sensor8 = self.MAX_DIST
+
+
 
     @TopicHandler(USHORT, USHORT, USHORT, USHORT, USHORT, USHORT, USHORT, USHORT)
     def get_all_sensors_handler(self, sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8):
@@ -127,6 +131,29 @@ class Sensors(SecureArduino):
 
     def check_errors(self):
         return self.execute(CHECK_ERROR_OPCODE).read(BYTE)
+
+import threading
+class ThreadSensors():
+    def __init__(self, sensors,robot):
+        self.sensors=sensors
+        self.robot=robot
+        self.thread=threading.Thread(target=self.loop)
+        print("debut2")
+        self.thread.start()
+    
+    def loop(self):
+        self.looping=True
+        
+        while(self.looping):
+            self.sensors.sensor1=self.sensors.get_sensor1_range()
+            #print(self.sensors.sensor1)
+            self.sensors.sensor2=self.sensors.get_sensor2_range()
+            self.sensors.sensor3=self.sensors.get_sensor3_range()
+            self.sensors.sensor4=self.sensors.get_sensor4_range()
+            self.sensors.sensor5=self.sensors.get_sensor5_range()
+            self.sensors.sensor6=self.sensors.get_sensor6_range()
+            self.sensors.sensor7=self.sensors.get_sensor7_range()
+            self.sensors.sensor8=self.sensors.get_sensor8_range()
 
 
 if __name__ == "__main__":

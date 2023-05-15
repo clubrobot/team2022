@@ -2,43 +2,61 @@ from common.components import Manager
 from daughter_cards.wheeledbase import WheeledBase
 #from daughter_cards.actionneur import Actionneur, AX12
 #from tracking.libs.positionDetector import PositionDetector
-#from daughter_cards.sensors import Sensors
+from daughter_cards.sensors import Sensors
 import time
+from time import sleep
 #from tracking.libs.positionDetectorMultiple import *
+from robots.team2023.ascenseur import Ascenseur
 import math
 from robots.team2023.team2023Robot import Bornibus
+from robots.team2023.pince import Pince
 #from common.gpiodevices import Switch, LightButton, gpio_pins
-manager = Manager("10.0.0.3")
+manager = Manager("10.0.0.2")
 
 manager.connect(7)
 
 from setups.setup_serialtalks import *
 
-born=Bornibus(manager=manager)
-born.start()
+pince=Pince(manager)
+#asc=Ascenseur(manager)
+print("a")
+#pince.ouvrir()
+#asc.bas()
+pince.fermer()
 
-"""wb=WheeledBase(manager)
-print(wb.left_wheel_radius.get())
+#asc.rouler()
+#print("bas")
+#asc.bas()
+wb=WheeledBase(manager)
+
+"""
+print(wb.left_codewheel_radius.get())
 print(wb.right_wheel_radius.get())
 ratio=wb.left_codewheel_radius.get()/wb.right_codewheel_radius.get()
 radius=wb.right_codewheel_radius.get()
-radius=23
+c=0.98
+radius=23*c
 ratio=1.0
-print(wb.wheels_axletrack.get())
-wb.wheels_axletrack.set(100)
+print(wb.codewheels_axletrack.get())
+wb.codewheels_axletrack.set(212.4*c)#212.4 23 1.0
+print(wb.codewheels_axletrack.get())
 wb.right_codewheel_radius.set(radius)
 wb.left_codewheel_radius.set(ratio*radius)
 print(ratio)
 
-wb.set_position(0,0,0)
+wb.set_position(0,1000,0)
+#wb.goto_stop(1200,1000,None,theta=0)
 #wb.set_openloop_velocities(500,0)
-wb.goto(0,500,finalangle=1.57)
-#wb.turnonthespot(3.14)
+#for i in range(3*2+1):
+    #print(i)
+    #wb.goto_stop(1000,1000,None,theta=-i*math.pi)
+"""
+#wb.turnonthespot(math.pi)
 wb.save_parameters()
-while True:
-    True
+#while True:
+#    True
     #print(wb.get_position())
-print("arrivé")"""
+print("arrivé",wb.get_position())
 
 #from managers.buttons_manager import ButtonsManager
 #ButtonsManager(None).begin()

@@ -4,7 +4,7 @@
 import time
 import math
 import numpy as np
-
+from time import sleep
 from common.serialutils import Deserializer
 from common.serialtalks import BYTE, LONG, FLOAT
 from daughter_cards.arduino import SecureArduino
@@ -248,10 +248,10 @@ class WheeledBase(SecureArduino):
 
 
     def goto_stop(self, x, y,sensors, theta=None, direction=None, finalangle=None, lookahead=None, lookaheadbis=None, linvelmax=None, angvelmax=None, **kwargs):
-        if(sensors is None):
+        """if(sensors is None):
             print("None")
-            self.goto(x,y,theta=theta,direction=direction,finalangle=finalangle)
-            return
+            self.goto(x,y,theta=theta,finalangle=finalangle)
+            return"""
         # Compute the preferred direction if not set
         if direction is None:
             x0, y0, theta0 = self.get_position()
@@ -264,20 +264,56 @@ class WheeledBase(SecureArduino):
         self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
         interrupt=False
         while not self.isarrived(raiseSpinUrgency=False):
-            
-            if(np.min(sensors.get_all())<100):
+            if(np.min(sensors.get_all())<500):
                 interrupt=True
                 self.stop()
-                print("arret")
+                #print("arret")
             elif interrupt:
                 interrupt=False
                 self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
-        
+            
         print("ARRIVE")
         
         # Get the setpoint orientation
         if theta is not None:
-            self.turnonthespot(theta)
+            rPos=self.get_position()
+            radiusRobot=370
+            ang=rPos[2]%(2*math.pi)
+            #fait en sorte que |ang-theta|<pi pr trouver le sens du robot
+            if(theta-ang>math.pi):
+                theta-=2*math.pi
+            if(ang-theta>math.pi):
+                ang-=2*math.pi
+            trigo=theta>ang#va ds le sens trigo
+            #le rbot va bouger ds l'intervalle [a;b] inclus ds [-pi;2pi]
+            a=min(ang,theta)
+            b=max(ang,theta)
+
+            #optimise le x et y (condition optimilité ss contrainte donne borne du problème)
+            xmin=math.cos(theta)*radiusRobot+rPos[0]
+            xmax=xmin
+            ymin=math.sin(theta)*radiusRobot+rPos[1]
+            ymax=ymin
+            #test x-
+            if(a<=-math.pi or (a<math.pi and b >math.pi)):
+                xmin=-radiusRobot+rPos[0]
+            if(b>=math.pi*2 or (a<0 and b>0)):
+                xmax=radiusRobot+rPos[0]
+            if((a<math.pi/2 and b >math.pi/2)):
+                ymax=radiusRobot+rPos[1]
+            if((a<3*math.pi/2 and b >3*math.pi/2) or (a<-math.pi/2 and b >-math.pi/2)):
+                ymin=radiusRobot+rPos[1]
+            
+            #print(trigo,ang,theta)
+            #print("     ",xmin,xmax,ymin,ymax)    
+            if(xmin<0 or xmax>2000 or ymin<0 or ymax>3000):
+                trigo =not trigo
+            
+            #print(trigo,['clock','trig'][trigo])
+            while(np.min(sensors.get_all())<600):
+                sleep(0.1)
+            self.turnonthespot(theta,direction=['clock','trig'][trigo])
+            print("fin commande turn on the spot")
             self.wait(**kwargs)
             
     def stop(self):
