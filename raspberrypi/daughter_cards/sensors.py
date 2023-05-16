@@ -45,6 +45,8 @@ class Sensors(SecureArduino):
         try:
             #self.addTopic(GET_ALL_TOPIC_OPCODE,
             #         self.get_all_sensors_handler, "sensors", self.TIMESTEP)
+            if(self.execute(CHECK_ERROR_OPCODE).read(BYTE)):
+                raise TimeoutError
             print("PASSE SENSORS")
         except:
             print("ERROR SENSORS")
@@ -146,7 +148,7 @@ class ThreadSensors():
         
         while(self.looping):
             self.sensors.sensor1=self.sensors.get_sensor1_range()
-            #print(self.sensors.sensor1)
+            print(self.sensors.sensor1)
             self.sensors.sensor2=self.sensors.get_sensor2_range()
             self.sensors.sensor3=self.sensors.get_sensor3_range()
             self.sensors.sensor4=self.sensors.get_sensor4_range()
