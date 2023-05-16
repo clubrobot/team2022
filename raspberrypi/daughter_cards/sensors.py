@@ -45,7 +45,7 @@ class Sensors(SecureArduino):
         try:
             #self.addTopic(GET_ALL_TOPIC_OPCODE,
             #         self.get_all_sensors_handler, "sensors", self.TIMESTEP)
-            print(self.execute(CHECK_ERROR_OPCODE).read(UCHAR))
+            if(self.execute(CHECK_ERROR_OPCODE).read(UCHAR)!=128): raise
             print("PASSE SENSORS")
         except:
             print("ERROR SENSORS")
