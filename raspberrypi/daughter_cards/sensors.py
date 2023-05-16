@@ -147,7 +147,7 @@ class ThreadSensors():
         
         while(self.looping):
             self.sensors.sensor1=self.sensors.get_sensor1_range()
-            print(self.sensors.sensor1)
+            #print(self.sensors.sensor1)
             self.sensors.sensor2=self.sensors.get_sensor2_range()
             self.sensors.sensor3=self.sensors.get_sensor3_range()
             self.sensors.sensor4=self.sensors.get_sensor4_range()

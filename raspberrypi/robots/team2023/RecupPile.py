@@ -16,7 +16,9 @@ class RecupPile:
         pass
 
     def procedure(self, robot):
+        print("asc")
         self.asc.rouler()
+        print("asc fin")
         rPos=np.array(self.wb.get_position()[:2])
         vecPos=self.pos-rPos[:2]
         length=math.sqrt(vecPos[0]**2+vecPos[1]**2)

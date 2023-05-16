@@ -264,6 +264,7 @@ class WheeledBase(SecureArduino):
         self.purepursuit([self.get_position()[0:2], (x, y)], direction, finalangle, lookahead, lookaheadbis, linvelmax, angvelmax)
         interrupt=False
         while not self.isarrived(raiseSpinUrgency=False):
+            #print(sensors.get_all())
             if(np.min(sensors.get_all()[0:4])<500 or np.min(sensors.get_all()[4:])<300):
                 interrupt=True
                 self.stop()
