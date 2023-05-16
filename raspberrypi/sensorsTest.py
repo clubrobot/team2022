@@ -15,8 +15,11 @@ manager.connect(10)
 
 from setups.setup_serialtalks import *
 
-sen = Sensors(manager, "sensors")
-print(sen.get_sensor1_range())
+
+sen = Sensors(manager, '10.0.0.2')
+
+print(sen.get_sensor8_range())
+'''
 print(sen.get_sensor2_range())
 print(sen.get_sensor3_range())
 print(sen.get_sensor4_range())
@@ -24,3 +27,4 @@ print(sen.get_sensor5_range())
 print(sen.get_sensor6_range())
 print(sen.get_sensor7_range())
 print(sen.get_sensor8_range())
+'''

@@ -4,7 +4,7 @@
 from collections.abc import Callable, Iterable, Mapping
 from typing import Any
 from common.serialutils import Deserializer
-from daughter_cards.arduino import SecureArduino, TopicHandler, USHORT, BYTE
+from daughter_cards.arduino import SecureArduino, TopicHandler, USHORT, UCHAR
 import time
 
 UNUSED_SENSOR = 65535
@@ -45,8 +45,7 @@ class Sensors(SecureArduino):
         try:
             #self.addTopic(GET_ALL_TOPIC_OPCODE,
             #         self.get_all_sensors_handler, "sensors", self.TIMESTEP)
-            if(self.execute(CHECK_ERROR_OPCODE).read(BYTE)):
-                raise TimeoutError
+            print(self.execute(CHECK_ERROR_OPCODE).read(UCHAR))
             print("PASSE SENSORS")
         except:
             print("ERROR SENSORS")
@@ -132,7 +131,7 @@ class Sensors(SecureArduino):
             return False
 
     def check_errors(self):
-        return self.execute(CHECK_ERROR_OPCODE).read(BYTE)
+        return self.execute(CHECK_ERROR_OPCODE).read(UCHAR)
 
 import threading
 class ThreadSensors():
@@ -162,4 +161,5 @@ class ThreadSensors():
 if __name__ == "__main__":
     from setups.setup_serialtalks import *
 
-    s = Sensors(manager, '/dev/tty.SLAB_USBtoUART')
+    s = Sensors(manager, '/dev/ttyUSB0')
+    print(s.get_sensor1_range())

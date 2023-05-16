@@ -5,7 +5,7 @@
 #include "topics.h"
 
 #include <SerialTalks.h>
-#include <SerialTopics.h>
+//#include <SerialTopics.h>
 
 #include <Wire.h>
 
@@ -41,7 +41,7 @@ uint16_t vl53_measurement[VL53L0X_COUNT] = {10};
 void talksExecuteWrapper()
 {
     talks.execute();
-    topics.execute();
+    //topics.execute();
 }
 
 void setup()
@@ -52,8 +52,8 @@ void setup()
     // Serial Communication
     Serial.begin(SERIALTALKS_BAUDRATE);
     talks.begin(Serial);
-    topics.begin(talks);
-    
+    //topics.begin(talks);
+    delay(100);
     // I2C Communication
     Wire.begin(SENSORS_SDA, SENSORS_SCL); //SDA SCL
     
@@ -70,7 +70,7 @@ void setup()
     talks.bind(CHECK_ERROR_OPCODE, CHECK_ERROR);
 
     //bind subscription
-    topics.bind(GET_ALL_OPCODE, GET_ALL);
+    //topics.bind(GET_ALL_OPCODE, GET_ALL);
 
 
     // Shutdown all VL53L0X sensors
@@ -91,7 +91,6 @@ void setup()
         {
             vl53_status[count++] = 1;
         }
-        Serial.println(vl53_status[count]);
     }
     count = 0;
 
@@ -100,16 +99,17 @@ void setup()
     {
         cur_sensor->startContinuous();
     }
+
 }
 
 // Loop
-uint16_t counter;
+uint8_t counter;
 void loop()
 {
     counter = 0;
 
     talks.execute();
-    topics.execute();
+    //topics.execute();
 
     for (const auto &cur_sensor : sensors_vl53){
         vl53_measurement[counter++] = cur_sensor->readRangeContinuousMillimeters(talksExecuteWrapper);

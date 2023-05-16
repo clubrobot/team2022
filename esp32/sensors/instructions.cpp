@@ -51,7 +51,7 @@ void CHECK_ERROR(SerialTalks &inst, Deserializer &input, Serializer &output)
 {
     uint8_t error = 0;
 
-    for (int i; i < VL53L0X_COUNT; i++)
+    for (int i=0; i < VL53L0X_COUNT; i++)
     {
         if (vl53_status[i] == 1)
         {

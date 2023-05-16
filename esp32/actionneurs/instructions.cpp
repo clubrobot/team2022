@@ -92,8 +92,10 @@ void READ_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output){
 
 void SET_ANGLE_SERVO(SerialTalks &inst, Deserializer &input, Serializer &output){
     byte select = input.read<byte>();
-    uint16_t angle = input.read<uint16_t>();
+    int angle = input.read<long>();
 
     if(select>4) return;
-    servoList[select].write(angle);
+    if(select<1) return;
+
+    servoList[select-1].write(angle);
 }
