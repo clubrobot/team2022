@@ -89,7 +89,7 @@ class Robot:
 
 
 from common.components import Manager
-manager = Manager("10.0.0.2")
+manager = Manager("localhost")
 
 manager.connect(7)
 
