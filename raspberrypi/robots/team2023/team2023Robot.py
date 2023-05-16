@@ -48,8 +48,8 @@ class Bornibus(RobotBehavior):
         #self.display = display
         self.pince= Pince(manager)
         self.ascenseur= Ascenseur(manager)
-        #self.sensors=Sensors(manager,"sensors")
-        self.sensors=None
+        self.sensors=Sensors(manager,"sensors")
+        #self.sensors=None
         self.blue=self.side==RobotBehavior.BLUE_SIDE
 
         self.automate = []#get 3 couleurs puis gerber puis poser cerises
