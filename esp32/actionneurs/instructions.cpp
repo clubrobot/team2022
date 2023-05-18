@@ -4,12 +4,7 @@
 extern AX12 ax;
 
 //Moche mais ça marche
-extern Servo servo1;
-extern Servo servo2;
-extern Servo servo3;
-extern Servo servo4;
-
-Servo servoList[4] = {servo1, servo2, servo3, servo4}; 
+extern Servo servo;
 /*
 All the instructions are with ax.attach this is for swaping between 
 differents ax12 that have differents ID
@@ -91,11 +86,7 @@ void READ_TORQUE(SerialTalks &inst, Deserializer &input, Serializer &output){
 }
 
 void SET_ANGLE_SERVO(SerialTalks &inst, Deserializer &input, Serializer &output){
-    byte select = input.read<byte>();
-    int angle = input.read<long>();
+    uint16_t angle = input.read<short>();
 
-    if(select>4) return;
-    if(select<1) return;
-
-    servoList[select-1].write(angle);
+    servo.write(angle);
 }

@@ -4,7 +4,6 @@ from common.gpiodevices import Switch, LightButton, gpio_pins
 from daughter_cards.wheeledbase import WheeledBase
 from daughter_cards.actionneur import Actionneur
 from daughter_cards.display import LEDMatrix, SevenSegments
-from tracking.libs.positionDetector import PositionDetector
 from daughter_cards.sensors import Sensors
 from listeners.sensor_listener import SensorListener
 
@@ -19,11 +18,7 @@ from setups.setup_serialtalks import *
 s = Actionneur(manager)
 s.connect()
 
-ax = s.AX12(1, s)
-ax2 = s.AX12(3, s)
-
-ax2.move(200)
-ax.move(100)
+s.SetServoAngle(0)
 
 	
 #LEFTCODEWHEEL_RADIUS_VALUE              = 21.90460280828869

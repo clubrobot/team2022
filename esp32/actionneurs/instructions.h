@@ -3,7 +3,7 @@
 
 #include <SerialTalks.h>
 #include <AX12.h>
-#include <Servo.h>
+#include <ESP32Servo.h>
 
 #define RESET_OPCODE 0X12
 

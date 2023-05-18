@@ -1,17 +1,13 @@
 #include <Arduino.h>
 #include <SerialTalks.h>
 #include <AX12.h>
-#include <Servo.h>
+#include <ESP32Servo.h>
 #include "PIN.h"
 #include "instructions.h"
 
 AX12 ax;
 
-Servo servo1;
-Servo servo2;
-Servo servo3;
-Servo servo4;
-
+Servo servo;
 
 void setup()
 {
@@ -46,11 +42,13 @@ void setup()
     //Baud, rx, tx, control
     AX12::SerialBegin(1000000, 5);
 
-    // Pin
-    servo1.attach(PIN_SERVO1);
-    servo2.attach(PIN_SERVO2);
-    servo3.attach(PIN_SERVO3);
-    servo4.attach(PIN_SERVO4);
+    //Servo config
+    ESP32PWM::allocateTimer(0);
+	ESP32PWM::allocateTimer(1);
+	ESP32PWM::allocateTimer(2);
+	ESP32PWM::allocateTimer(3);
+	servo.setPeriodHertz(50);    // standard 50 hz servo
+	servo.attach(PIN_SERVO2, 1000, 2000); // attaches the servo on pin 18 to the servo object
 }
 void loop(){ 
     talks.execute();
