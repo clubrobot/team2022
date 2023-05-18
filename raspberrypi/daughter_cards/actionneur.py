@@ -64,7 +64,7 @@ class Actionneur(SecureArduino):
 
         def move(self, Pos): self.parent.send(MOVE_OPCODE, BYTE(self.id), FLOAT(Pos))
 
-        def turn(self, Speed): self.send(TURN_OPCODE, BYTE(self.id), FLOAT(Speed))
+        def turn(self, Speed): self.parent.send(TURN_OPCODE, BYTE(self.id), FLOAT(Speed))
 
         def stop_turn(self): self.parent.turn(0)
         

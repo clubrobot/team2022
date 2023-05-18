@@ -27,6 +27,7 @@ class Robot:
         self.side = side
 
         self.actionneur = Actionneur(manager, "actionneurs")
+        self.actionneur.SetServoAngle(300)
         self.wheeledbase = WheeledBase(manager)
         #self.display = display
         self.pince= Pince(self.actionneur)
@@ -47,17 +48,17 @@ class Robot:
             self.wheeledbase.set_position(v/2,3000-h/2-50,-math.pi/2)
             self.base=self.geo.get('ZB1')
             self.end=self.geo.get('ZB2')
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose1'),np.array(self.base)+(-90,80),self.pince,self.ascenseur))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune1'),np.array(self.base)+(110,80),self.pince,self.ascenseur))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir1'),np.array(self.base)+(310,80),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose1'),np.array(self.base)+(-90,110),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune1'),np.array(self.base)+(110,110),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir1'),np.array(self.base)+(0,-80),self.pince,self.ascenseur))
             
         else:#couleur paire
             self.base=self.geo.get('ZV1')
             self.end=self.geo.get('ZV2')
             self.wheeledbase.set_position(2000-v/2,3000-h/2-50,-math.pi/2)
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose2'),np.array(self.base)+(90,80),self.pince,self.ascenseur))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune2'),np.array(self.base)+(-90,80),self.pince,self.ascenseur))
-            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir2'),np.array(self.base)+(-270,80),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Rose2'),np.array(self.base)+(90,110),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Jaune2'),np.array(self.base)+(-90,110),self.pince,self.ascenseur))
+            self.automate.append(RecupPile(self.wheeledbase,self.geo.get('Noir2'),np.array(self.base)+(0,-80),self.pince,self.ascenseur))
             
 
     def start(self):
@@ -74,22 +75,25 @@ class Robot:
         
         debut=time()
         print("tiretté")
+
+        self.wheeledbase.goto_stop(3000-115/2-50,self.base[1],sensors=self.sensors,theta=-math.pi/2)
+        self.actionneur.SetServoAngle(0)
         self.automate[0].procedure(self)
-        if(orange_button.button.is_pressed):
-            return False
+        if(orange_button.button.is_pressed or (time()-debut)>90):
+            return (time()-debut)>90
         self.automate[1].procedure(self)
-        if(orange_button.button.is_pressed):
-            return False
+        if(orange_button.button.is_pressed or (time()-debut)>90):
+            return (time()-debut)>90
         self.automate[2].procedure(self)
-        if(orange_button.button.is_pressed):
-            return False
+        if(orange_button.button.is_pressed or (time()-debut)>90):
+            return (time()-debut)>90
         self.wheeledbase.goto_stop(self.end[0],self.end[1],sensors=self.sensors)
         self.threadSensors.looping=False
         return True
 
 
 from common.components import Manager
-manager = Manager("localhost")
+manager = Manager("10.0.0.2")
 
 manager.connect(7)
 

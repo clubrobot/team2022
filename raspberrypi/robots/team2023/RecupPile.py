@@ -34,7 +34,7 @@ class RecupPile:
         stop=vecPos/length*(length-self.radiusPince)+rPos
         self.wb.goto_stop(stop[0],stop[1],robot.sensors,theta=ang)
         print(self.wb.get_position(),stop)
-        sleep(2)
+        #sleep(2)
         self.pince.fermer()
         self.asc.rouler()
 
@@ -49,9 +49,9 @@ class RecupPile:
 
         self.wb.goto_stop(stop[0],stop[1],robot.sensors,theta=ang)
         print(self.wb.get_position(),stop)
-        sleep(4)
+        #sleep(4)
         self.asc.bas()
-        self.pince.ouvrir()
+        self.pince.semi_ouvrir()
         self.asc.rouler()
         
         #si ascenseur pas besoin de ca

@@ -12,7 +12,7 @@ class Pince:
         
 
     def fermer(self):
-        end=280
+        end=300
         deb=time.time()
         self.pince.move(end)
         print(self.pince.readPosition())
@@ -20,6 +20,14 @@ class Pince:
             continue
     def ouvrir(self):
          end=0
+         deb=time.time()
+         self.pince.move(end)
+         self.pince.readPosition()
+         while((abs(self.pince.readPosition()-end)>5 or self.pince.readSpeed()>0) and time.time()-deb<3):
+            continue
+         
+    def semi_ouvrir(self):
+         end=150
          deb=time.time()
          self.pince.move(end)
          self.pince.readPosition()

@@ -17,7 +17,10 @@ manager.connect(7)
 
 from setups.setup_serialtalks import *
 actionneur = Actionneur(manager, "actionneurs")
+#actionneur.connect()
 pince=Pince(actionneur)
+print("tourne")
+actionneur.SetServoAngle(300)
 #asc=Ascenseur(actionneur)
 print("a")
 #pince.ouvrir()
