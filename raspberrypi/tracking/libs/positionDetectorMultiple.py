@@ -18,24 +18,25 @@ class PositionDetectorMultiple:
         self.invViewMatrix = np.identity(4)
         self.invProjectionMatrix= np.identity(4)
         self.cameraPos = []
-        self.FOV = 90
+        self.FOV = 70
         self.camera = None
         self.WIDTH = 480
         self.HEIGTH = 480
         self.CENTER_MARKER_ID=17
-        self.KNOW_DISTANCE_TO_MARKER = 1
+        self.KNOW_DISTANCE_TO_MARKER = 300
         self.KNOW_WIDTH_MARKER = 0.06
         self.DELTA_TIME_SPEED=100
 
         self.markerIds=[]
         self.markerPositions={}
-        self.dictionary = cv2.aruco.Dictionary_get(aruco.DICT_4X4_250)
-        self.parameters = aruco.DetectorParameters_create()
+        self.dictionary = cv2.aruco.getPredefinedDictionary(aruco.DICT_4X4_250)
+        self.parameters = aruco.DetectorParameters()
+        self.detector=aruco.ArucoDetector(self.dictionary,self.parameters)
 
     #find the marker length on the screen
     def find_marker_length(self,img,idMarker):
         imgTree = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        markerCorners, markerids, rejectedCandidates = aruco.detectMarkers(imgTree, self.dictionary, parameters=self.parameters)
+        markerCorners, markerids, rejectedCandidates = self.detector.detectMarkers(imgTree)
         if markerids is not None:
             for i in range(0, len(markerids)):
                 if markerids[i][0] == idMarker:
@@ -120,7 +121,8 @@ class PositionDetectorMultiple:
         self.markerPositions={}
 
         imgTree = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        markerCorners, markerids, rejectedCandidates = aruco.detectMarkers(imgTree, self.dictionary, parameters=self.parameters)
+
+        markerCorners, markerids, rejectedCandidates = self.detector.detectMarkers(imgTree)
         if markerids is not None:
             for i in range(0, len(markerids)):
                 if markerids[i][0] in self.markerIds:
@@ -140,7 +142,7 @@ class PositionDetectorMultiple:
                     self.markerPositions[markerids[i][0]].append(pos)
 
     #add a new maker to follow
-    def addMarkerId(self,idMarker):
+    def addMarker(self,idMarker):
         self.markerIds.append(idMarker)
         
 

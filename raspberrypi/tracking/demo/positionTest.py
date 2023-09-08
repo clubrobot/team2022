@@ -1,4 +1,4 @@
-from libs.positionDetectorMultiple import *
+from team2022.raspberrypi.tracking.libs.positionDetectorMultiple import *
 import math
 
 posdetect=PositionDetectorMultiple()
